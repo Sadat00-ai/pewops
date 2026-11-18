@@ -183,7 +183,8 @@ class MainActivity : BridgeActivity() {
   const splashes = walk(resDir, function (f) { return path.basename(f) === "splash.png"; });
   splashes.forEach(function (file) {
     const port = /drawable-port/.test(file);
-    fs.copyFileSync(path.join(resSrc, port ? "splash-port.png" : "splash-land.png"), file);
+    const from = path.join(resSrc, port ? "splash-port.png" : "splash-land.png");
+    if (fs.existsSync(from)) fs.copyFileSync(from, file);
   });
   done.push("splash screens (" + splashes.length + ")");
 })();
