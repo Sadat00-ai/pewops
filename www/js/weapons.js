@@ -13,3 +13,15 @@ const WEAPON_UNLOCKS = { shotgun: 2, sniper: 4 };
 function weaponIndex(id) {
   return WEAPONS.findIndex(function (w) { return w.id === id; });
 }
+
+// Weapon stats after the player's permanent upgrades (bought in the Upgrades screen).
+// The base WEAPONS list never changes; every run builds its own copy from this.
+function effectiveWeapon(base) {
+  const up = (save.weaponUp && save.weaponUp[base.id]) || { dmg: 0, mag: 0, rate: 0 };
+  const w = Object.assign({}, base);
+  w.damage = Math.round(base.damage * (1 + 0.1 * up.dmg));
+  w.mag = base.mag + Math.ceil(base.mag * 0.12 * up.mag);
+  w.rate = Math.max(0.05, base.rate * (1 - 0.05 * up.rate));
+  w.reload = base.reload * (1 - 0.04 * up.mag);
+  return w;
+}
