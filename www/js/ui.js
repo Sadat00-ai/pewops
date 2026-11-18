@@ -67,6 +67,8 @@ const UI = {
     if (profileAvatar) profileAvatar.className = "avatar avatar-profile avatar-" + save.profile.avatar;
   },
 
+  syncPause() {},
+
   showEnd(title, lines, actions) {
     document.getElementById("end-title").textContent = title;
 
