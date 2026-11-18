@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="author" content="SM Sadat">
+  <meta name="theme-color" content="#101713">
+  <meta name="description" content="PEWOPS — an arcade military shooter created by SM Sadat.">
+  <title>PewOps — Arcade Combat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/game.css">
+  <link rel="stylesheet" href="css/lobby.css">
+  <link rel="stylesheet" href="css/polish.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <div id="rotate-hint"><span class="rotate-icon"></span><strong>ROTATE YOUR PHONE</strong><small>PEWOPS IS PLAYED IN LANDSCAPE</small></div>
+  <main id="stage" aria-label="PewOps game">
+    <canvas id="game" aria-label="Game arena"></canvas>
+
+    <section id="menu" class="screen home-screen">
+      <header class="topbar">
+        <a class="brand" href="#menu" aria-label="PewOps home">
+          <span class="brand-mark"><i></i><i></i><i></i></span>
+          <span class="brand-copy"><strong>PEW<span>OPS</span></strong><small>ARCADE COMBAT <b>2.2</b></small></span>
+        </a>
+        <button class="profile-chip" type="button" data-action="profile" aria-label="Open player profile">
+          <span class="avatar avatar-scout" id="home-avatar"><span></span></span>
+          <span class="profile-chip-copy"><small>OPERATOR</small><strong id="home-callsign">ROOKIE</strong></span>
+          <span class="online-dot"></span>
+        </button>
+      </header>
+
+      <div class="home-content">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> ARCADE COMBAT <span class="status-live">READY TO PLAY</span></div>
+          <div class="hero-kicker"><span class="kicker-icon">✦</span> YOUR NEXT DEPLOYMENT STARTS HERE</div>
+          <h1>LOCK. LOAD.<br><em>LET'S PLAY.</em></h1>
+          <p class="hero-description">Pick your fighter, tune your loadout and jump into the arena. Thirty operations are waiting. Your squad is counting on you.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-large" data-action="campaign"><span class="btn-symbol play-symbol">▶</span><span><strong>PLAY CAMPAIGN</strong><small>30 MISSIONS · UNLOCK THE BATTLEFIELD</small></span><b class="btn-arrow">→</b></button>
+            <button class="btn btn-ghost btn-large" data-action="survival"><span class="btn-symbol">✚</span><span><strong>QUICK MATCH</strong><small>JUMP STRAIGHT INTO THE ACTION</small></span><b class="btn-arrow">→</b></button>
+          </div>
+          <div class="mode-links">
+            <button data-action="timeattack"><span>◷</span> TIME ATTACK</button>
+            <button data-action="training"><span>◎</span> TRAINING ARENA</button>
+          </div>
+          <div class="hero-footnote"><span class="footnote-star">★</span><span>SOLO PLAY</span><i></i><span>LOCAL PROGRESS</span><i></i><span class="kbd-only">NO DOWNLOAD REQUIRED</span><span class="touch-only">PLAYS OFFLINE</span></div>
+        </div>
+
+        <aside class="home-side" aria-label="Operator and loadout overview">
+          <div class="showcase-scene">
+            <div class="scene-orbit scene-orbit-one"></div>
+            <div class="scene-orbit scene-orbit-two"></div>
+            <div class="scene-glow"></div>
+            <div class="scene-topline"><span><i class="status-pip"></i> SQUAD DEPLOYMENT</span><b>SECTOR 07</b></div>
+            <img class="operator-squad-art" src="assets/operator-squad.svg" alt="Three original cartoon-style PewOps operators ready for deployment">
+            <div class="scene-caption"><span class="scene-caption-tag">FIELD UNIT / 07</span><strong>READY FOR<br><em>ANYTHING.</em></strong><small>CHOOSE YOUR FIGHT. MAKE YOUR MARK.</small></div>
+            <div class="scene-coordinate">23° 48' N &nbsp; 90° 24' E <span>●</span></div>
+          </div>
+
+          <div class="home-side-dashboard">
+            <div class="operator-card panel">
+              <div class="panel-heading"><span>YOUR OPERATOR</span><i><span class="status-pip"></span> ACTIVE</i></div>
+              <div class="operator-main">
+                <div class="operator-portrait avatar avatar-large avatar-scout" id="home-operator-avatar"><span></span><b></b></div>
+                <div class="operator-info"><small>FIELD RANK</small><h2 id="home-rank">RECRUIT</h2><p id="home-xp">0 XP EARNED</p></div>
+              </div>
+              <div class="operator-progress"><div class="progress-meta"><span>NEXT RANK</span><strong id="home-next-rank">100 XP</strong></div><div class="progress-track"><span id="home-xp-bar"></span></div></div>
+              <button class="text-action" data-action="profile">EDIT OPERATOR <b>↗</b></button>
+            </div>
+
+            <div class="side-quick-data">
+              <div class="stat-grid">
+                <div class="mini-stat panel"><span>MISSIONS</span><strong id="home-missions">01<span>/30</span></strong></div>
+                <div class="mini-stat panel"><span>ELIMINATIONS</span><strong id="home-kills">000</strong></div>
+              </div>
+              <div class="loadout-strip panel">
+                <div class="panel-heading"><span>ACTIVE LOADOUT</span><i>PRIMARY</i></div>
+                <div class="loadout-content"><div class="weapon-preview" id="home-weapon-icon">▰</div><div><small>WEAPON EQUIPPED</small><strong id="home-weapon">SERVICE PISTOL</strong></div><button class="icon-button" data-action="weapons" aria-label="Change weapon">↗</button></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="home-footer">
+        <div class="footer-status"><span class="status-pip"></span> SYSTEM ONLINE <i></i> LOCAL SAVE ACTIVE</div>
+        <nav class="footer-nav" aria-label="Main navigation">
+          <button data-action="weapons">ARSENAL</button>
+          <button data-action="profile">OPERATOR</button>
+          <button data-action="settings">SETTINGS</button>
+          <button data-action="leaderboard">RECORDS</button>
+          <button data-action="instructions">CONTROLS</button>
+        </nav>
+        <span class="version-label">PEWOPS 2.2 · CREATED BY SM SADAT</span>
+      </footer>
+    </section>
+
+    <section id="campaign" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">MISSION SELECT / THEATER COMMAND</span><h2>CAMPAIGN <em>OPERATIONS</em></h2><p class="screen-intro">Thirty missions. One hostile region. Complete each operation to unlock the next.</p></div><div class="mission-counter"><strong id="campaign-progress">01<span>/30</span></strong><small>OPERATIONS UNLOCKED</small></div></header>
+      <div class="campaign-progress"><span id="campaign-progress-bar"></span></div>
+      <div id="level-list" class="mission-grid" aria-label="Campaign missions"></div>
+      <div class="screen-actions"><span class="legend"><i class="legend-open"></i> AVAILABLE <i class="legend-locked"></i> LOCKED</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="weapons" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">ARMORY / WEAPON CONFIGURATION</span><h2>CHOOSE YOUR <em>LOADOUT</em></h2><p class="screen-intro">Select the primary weapon you will carry into your next deployment.</p></div><div class="armory-stamp">FIELD<br>TESTED</div></header>
+      <div id="weapon-list" class="weapon-grid"></div>
+      <div class="screen-actions"><span class="legend">UNLOCK WEAPONS BY CLEARING CAMPAIGN MISSIONS</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="profile" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">PERSONNEL / SERVICE RECORD</span><h2>OPERATOR <em>PROFILE</em></h2><p class="screen-intro">Your callsign, service record and field progression are saved on this device.</p></div><div class="profile-stamp"><span class="status-pip"></span> PERSONNEL FILE</div></header>
+      <div class="profile-layout">
+        <div class="profile-identity panel">
+          <div class="profile-avatar-wrap"><div class="avatar avatar-profile avatar-scout" id="profile-avatar"><span></span><b></b></div><div><small>CURRENT RANK</small><h3 id="profile-rank">RECRUIT</h3><span class="rank-tag">PEWOPS PERSONNEL</span></div></div>
+          <label class="field-label" for="callsign-input">PLAYER NAME / OPERATOR CALLSIGN</label>
+          <form id="profile-form" class="callsign-row" autocomplete="off" novalidate>
+            <input id="callsign-input" name="callsign" type="text" maxlength="16" value="ROOKIE" placeholder="ENTER YOUR NAME" autocomplete="off" spellcheck="false" aria-describedby="profile-feedback">
+            <button id="save-profile" class="btn btn-primary" type="submit">SAVE NAME</button>
+          </form>
+          <div class="avatar-choice-label">CHOOSE YOUR FIELD COLOURS</div>
+          <div class="avatar-choices" role="group" aria-label="Choose operator colours">
+            <button class="avatar-choice chosen" data-avatar="scout" aria-label="Olive scout uniform"><span class="avatar avatar-scout"><span></span></span></button>
+            <button class="avatar-choice" data-avatar="desert" aria-label="Desert uniform"><span class="avatar avatar-desert"><span></span></span></button>
+            <button class="avatar-choice" data-avatar="navy" aria-label="Navy uniform"><span class="avatar avatar-navy"><span></span></span></button>
+            <button class="avatar-choice" data-avatar="crimson" aria-label="Crimson uniform"><span class="avatar avatar-crimson"><span></span></span></button>
+          </div>
+          <p id="profile-feedback" class="inline-feedback" aria-live="polite">PROFILE SYNCED</p>
+        </div>
+        <div class="profile-record panel">
+          <div class="panel-heading"><span>CAREER STATISTICS</span><i>LOCAL RECORD</i></div>
+          <div class="record-grid">
+            <div><small>TOTAL ELIMINATIONS</small><strong id="profile-kills">0</strong></div>
+            <div><small>MISSIONS UNLOCKED</small><strong id="profile-missions">1 / 30</strong></div>
+            <div><small>CAREER HIGH SCORE</small><strong id="profile-score">0</strong></div>
+            <div><small>EXPERIENCE POINTS</small><strong id="profile-xp">0 XP</strong></div>
+          </div>
+          <div class="rank-progress-block"><div class="progress-meta"><span>RANK PROGRESS</span><strong id="profile-rank-progress">0 / 100 XP</strong></div><div class="progress-track"><span id="profile-xp-bar"></span></div></div>
+          <div class="service-note"><span>★</span><p>Every completed mission and elimination adds to your service record. Keep pushing forward, operator.</p></div>
+        </div>
+      </div>
+      <div class="screen-actions"><span class="legend">YOUR RECORD IS STORED LOCALLY ON THIS DEVICE</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="settings" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">SYSTEM / PREFERENCES</span><h2>GAME <em>SETTINGS</em></h2><p class="screen-intro">Tune audio levels and set up your preferred play experience.</p></div><div class="settings-stamp">CONFIG<br>02.2</div></header>
+      <div class="settings-layout">
+        <div class="settings-panel panel">
+          <div class="panel-heading"><span>AUDIO CONTROL</span><i>OUTPUT MIXER</i></div>
+          <label class="setting-row" for="music-vol"><span><strong>BACKGROUND MUSIC</strong><small>Ambient combat soundtrack</small></span><input id="music-vol" type="range" min="0" max="100" value="35"><output id="music-value">35%</output></label>
+          <label class="setting-row" for="sfx-vol"><span><strong>SOUND EFFECTS</strong><small>Weapons, impacts and interface sounds</small></span><input id="sfx-vol" type="range" min="0" max="100" value="70"><output id="sfx-value">70%</output></label>
+          <div class="setting-footnote">Move a slider to zero to mute that channel.</div>
+        </div>
+        <div class="settings-panel panel">
+          <div class="panel-heading"><span>GAMEPLAY</span><i>FIELD OPTIONS</i></div>
+          <div class="setting-info kbd-only"><span class="setting-icon">⌨</span><div><strong>KEYBOARD + MOUSE</strong><small>WASD movement · mouse aim and fire</small></div><span class="setting-status">ACTIVE</span></div>
+          <div class="setting-info touch-only"><span class="setting-icon">◉</span><div><strong>TOUCH CONTROLS</strong><small>Left thumb moves · right thumb aims and fires</small></div><span class="setting-status">ACTIVE</span></div>
+          <div class="setting-info"><span class="setting-icon">▤</span><div><strong>LOCAL PROGRESS</strong><small>Campaign, loadout and records saved automatically</small></div><span class="setting-status">ON</span></div>
+          <div class="setting-info"><span class="setting-icon">★</span><div><strong>PEWOPS 2.2</strong><small>Game created by SM Sadat</small></div><span class="setting-status">ABOUT</span></div>
+          <button class="btn btn-danger reset-button" data-action="reset">RESET ALL LOCAL PROGRESS</button>
+        </div>
+      </div>
+      <div class="screen-actions"><span class="legend">CHANGES ARE SAVED AUTOMATICALLY</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="instructions" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">FIELD MANUAL / BASIC TRAINING</span><h2>COMBAT <em>CONTROLS</em></h2><p class="screen-intro">Learn the controls before entering the arena.</p></div><div class="manual-stamp">FM<br>01</div></header>
+      <div class="controls-grid panel">
+        <div class="control-group kbd-only"><span class="control-number">01</span><div><h3>MOVEMENT</h3><p>Move around the arena and use cover to break enemy line of sight.</p><div class="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>OR</span><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div></div></div>
+        <div class="control-group kbd-only"><span class="control-number">02</span><div><h3>AIM & FIRE</h3><p>Move your mouse to aim. Hold the left mouse button to fire continuously.</p><div class="keycaps"><kbd>MOUSE</kbd><span> AIM</span><kbd>LMB</kbd><span> FIRE</span></div></div></div>
+        <div class="control-group kbd-only"><span class="control-number">03</span><div><h3>WEAPON HANDLING</h3><p>Reload, switch weapon or throw a grenade when enemies close in.</p><div class="keycaps"><kbd>R</kbd><span> RELOAD</span><kbd>1–4</kbd><span> WEAPONS</span><kbd>G</kbd><span> GRENADE</span></div></div></div>
+        <div class="control-group kbd-only"><span class="control-number">04</span><div><h3>PAUSE</h3><p>Pause the action at any time. The arena stops while the pause menu is open.</p><div class="keycaps"><kbd>ESC</kbd><span> PAUSE / RESUME</span></div></div></div>
+      
+        <div class="control-group touch-only"><span class="control-number">01</span><div><h3>MOVE</h3><p>Drag anywhere on the left side of the screen. Push further to run faster.</p><div class="keycaps"><span>LEFT THUMB</span></div></div></div>
+        <div class="control-group touch-only"><span class="control-number">02</span><div><h3>AIM &amp; FIRE</h3><p>Drag on the right side to aim. Your soldier fires automatically while you hold the stick out.</p><div class="keycaps"><span>RIGHT THUMB</span></div></div></div>
+        <div class="control-group touch-only"><span class="control-number">03</span><div><h3>WEAPON BUTTONS</h3><p>Use the buttons around the sticks to throw a grenade, reload or swap to your next unlocked weapon.</p><div class="keycaps"><span>GRENADE · RELOAD · SWAP</span></div></div></div>
+        <div class="control-group touch-only"><span class="control-number">04</span><div><h3>PAUSE</h3><p>Tap the pause button at the top-right, or use your phone's back button.</p><div class="keycaps"><span>BACK BUTTON = PAUSE</span></div></div></div>
+      </div>
+      <p class="manual-tip"><strong>FIELD TIP:</strong> Green supply crates restore health. Orange crates replenish ammunition and grenades. Keep moving.</p>
+      <div class="screen-actions"><span class="legend">TRAINING MODE HAS UNLIMITED LIVES AND AMMO</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="leaderboard" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">INTELLIGENCE / FIELD RECORDS</span><h2>MISSION <em>RECORDS</em></h2><p class="screen-intro">Your best runs, ranked by score. Records stay on this device.</p></div><div class="records-stamp">TOP<br>8</div></header>
+      <ol id="score-list" class="score-table panel"></ol>
+      <div class="screen-actions"><span class="legend">PERSONAL BESTS · LOCAL LEADERBOARD</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="pause" class="screen modal-screen" hidden>
+      <div class="modal-card panel"><span class="eyebrow">TACTICAL PAUSE</span><h2>MISSION <em>ON HOLD</em></h2><p>Take a breath, operator. The arena is standing by.</p><nav class="list modal-actions"><button class="btn btn-primary" data-action="resume">RESUME DEPLOYMENT <b>↗</b></button><button class="btn btn-ghost" data-action="restart">RESTART MISSION</button><button class="btn btn-ghost" data-action="quit">RETURN TO BASE</button></nav><small class="modal-hint">PRESS ESC TO RESUME</small></div>
+    </section>
+
+    <section id="end" class="screen modal-screen" hidden>
+      <div class="modal-card panel result-card"><span class="eyebrow">AFTER ACTION REPORT</span><h2 id="end-title">MISSION COMPLETE</h2><ul id="end-stats" class="stats"></ul><div id="end-actions" class="list modal-actions"></div></div>
+    </section>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/weapons.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/touch.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

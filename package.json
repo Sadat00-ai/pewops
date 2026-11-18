@@ -1,0 +1,24 @@
+{
+  "name": "pewops",
+  "version": "2.2.0",
+  "description": "PewOps - Arcade Combat. An arcade military shooter created by SM Sadat.",
+  "author": "SM Sadat",
+  "private": true,
+  "scripts": {
+    "build:apk": "node scripts/build.js",
+    "sync": "node scripts/build.js --sync-only",
+    "open": "npx cap open android",
+    "serve": "npx --yes http-server www -p 8080 -c-1"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/app": "^8.0.0",
+    "@capacitor/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

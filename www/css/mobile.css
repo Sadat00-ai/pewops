@@ -1,0 +1,208 @@
+/* PEWOPS 2.2 — phone & tablet layer.
+   Everything here is scoped to html.is-touch (set by js/touch.js), so the desktop version is untouched. */
+
+html.is-touch, html.is-touch body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+html.is-touch input { -webkit-user-select: text; user-select: text; }
+html.is-touch body {
+  display: block;
+  padding: 0;
+  background: #070c09;
+}
+
+/* The stage fills the whole screen; menus use all of it, the arena stays 16:10 in the middle. */
+html.is-touch #stage {
+  position: fixed;
+  inset: 0;
+  width: var(--app-w, 100vw);
+  height: var(--app-h, 100vh);
+  min-height: 0;
+  aspect-ratio: auto;
+  overflow: hidden;
+  border: 0;
+  box-shadow: none;
+}
+html.is-touch #stage::after { display: none; }
+html.is-touch #game {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  width: min(var(--app-w, 100vw), calc(var(--app-h, 100vh) * 1.6));
+  height: min(calc(var(--app-w, 100vw) * 0.625), var(--app-h, 100vh));
+  transform: translate(-50%, -50%);
+}
+
+/* Landscape phones: keep the compact two-column menus and make them fit a short screen. */
+html.is-touch .screen {
+  left: env(safe-area-inset-left, 0px);
+  right: env(safe-area-inset-right, 0px);
+}
+@media (orientation: landscape) and (max-height: 480px) {
+  html.is-touch .home-screen { grid-template-rows: 52px minmax(0, 1fr) 40px; padding: 8px 18px 6px; }
+  html.is-touch .topbar { height: 52px; padding-bottom: 6px; }
+  html.is-touch .home-content { padding: 6px 0; gap: 14px; }
+  html.is-touch .hero-copy .eyebrow, html.is-touch .hero-kicker, html.is-touch .hero-description, html.is-touch .hero-footnote { display: none; }
+  html.is-touch .hero-copy h1 { margin: 0 0 12px; font-size: 38px; }
+  html.is-touch .hero-actions { margin-top: 0; gap: 8px; }
+  html.is-touch .btn-large { min-height: 52px; padding: 7px 14px; }
+  html.is-touch .mode-links { margin-top: 10px; }
+  html.is-touch .scene-caption, html.is-touch .scene-coordinate { display: none; }
+}
+
+@media (orientation: landscape) and (max-height: 400px) {
+  html.is-touch .hero-copy h1 { display: none; }
+  html.is-touch .btn-large { min-height: 46px; }
+  html.is-touch .btn-large small { display: none; }
+  html.is-touch .scene-topline { display: none; }
+}
+
+/* Short screens: inner pages scroll instead of squeezing their content; the back bar stays put. */
+@media (orientation: landscape) and (max-height: 520px) {
+  html.is-touch .inner-screen { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 22px 0; }
+  html.is-touch .inner-screen > * { flex-shrink: 0; }
+  html.is-touch .screen-intro { display: none; }
+  html.is-touch .screen-heading h2 { font-size: 26px; }
+  html.is-touch .campaign-progress { margin: 8px 0; }
+  html.is-touch .mission-grid { flex: none; grid-template-rows: none; grid-auto-rows: minmax(66px, auto); }
+  html.is-touch .weapon-grid { flex: none; align-content: start; margin-top: 8px; }
+  html.is-touch .weapon-card { min-height: 235px; }
+  html.is-touch .profile-layout, html.is-touch .settings-layout { flex: none; padding: 10px 0; }
+  html.is-touch .controls-grid { flex: none; margin: 10px 0 8px; }
+  html.is-touch .control-group { min-height: 96px; }
+  html.is-touch .score-table { flex: none; min-height: 0; }
+  html.is-touch .screen-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    margin: 0 -22px;
+    padding: 8px 22px 8px;
+    background: linear-gradient(rgba(8, 15, 12, 0), rgba(8, 15, 12, .97) 38%);
+  }
+}
+
+/* ---------- On-screen controls ---------- */
+#touch-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  --stick: clamp(96px, 32vh, 150px);
+  --btn: clamp(44px, 14vh, 62px);
+}
+#touch-ui[hidden] { display: none !important; }
+
+.tzone {
+  position: absolute;
+  top: 18%;
+  bottom: 0;
+  pointer-events: auto;
+  touch-action: none;
+}
+.tzone-move { left: 0; width: 44%; }
+.tzone-aim { right: 0; width: 44%; }
+
+.tstick {
+  position: fixed;
+  width: var(--stick);
+  height: var(--stick);
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  border-radius: 50%;
+  border: 2px solid rgba(198, 239, 112, .42);
+  background: radial-gradient(circle, rgba(198, 239, 112, .07), rgba(8, 15, 11, .32));
+  opacity: .5;
+  pointer-events: none;
+  transition: opacity .12s;
+}
+.tstick-move { left: calc(22px + env(safe-area-inset-left)); }
+.tstick-aim { right: calc(22px + env(safe-area-inset-right)); border-color: rgba(255, 189, 89, .5); }
+.tstick.active { opacity: .95; bottom: auto; }
+.tstick i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44%;
+  height: 44%;
+  margin: -22% 0 0 -22%;
+  border-radius: 50%;
+  background: rgba(198, 239, 112, .7);
+  box-shadow: 0 0 0 2px rgba(10, 18, 12, .5);
+}
+.tstick-aim i { background: rgba(255, 189, 89, .75); }
+
+.tbtn {
+  position: absolute;
+  width: var(--btn);
+  height: var(--btn);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(198, 239, 112, .5);
+  background: rgba(10, 20, 14, .62);
+  color: #e8f3d6;
+  font-family: var(--heading);
+  letter-spacing: .04em;
+  pointer-events: auto;
+  touch-action: none;
+}
+.tbtn b { font-size: clamp(7px, 2.2vh, 10px); font-weight: 800; letter-spacing: 0; }
+.tbtn.pressed { background: rgba(198, 239, 112, .55); color: #0b140d; transform: scale(.94); }
+.tbtn-grenade { right: calc(var(--stick) + 36px + env(safe-area-inset-right)); bottom: calc(18px + env(safe-area-inset-bottom)); border-color: rgba(255, 189, 89, .65); }
+.tbtn-reload { right: calc(34px + env(safe-area-inset-right)); bottom: calc(var(--stick) + 26px + env(safe-area-inset-bottom)); }
+.tbtn-weapon { left: calc(34px + env(safe-area-inset-left)); bottom: calc(var(--stick) + 26px + env(safe-area-inset-bottom)); }
+.tbtn-pause {
+  top: calc(8px + env(safe-area-inset-top));
+  right: calc(8px + env(safe-area-inset-right));
+  width: clamp(36px, 10vh, 46px);
+  height: clamp(36px, 10vh, 46px);
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+.tbtn-pause span { width: 5px; height: 38%; border-radius: 2px; background: #e8f3d6; }
+
+/* ---------- Touch wording & menu tweaks ---------- */
+html:not(.is-touch) .touch-only { display: none !important; }
+html.is-touch .kbd-only { display: none !important; }
+
+/* ---------- Portrait: ask the player to rotate ---------- */
+#rotate-hint { display: none; }
+@media (orientation: portrait) {
+  html.is-touch #rotate-hint {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 24px;
+    text-align: center;
+    color: #eef1e8;
+    background: #070c09;
+    font-family: var(--heading);
+    letter-spacing: .12em;
+  }
+  html.is-touch #rotate-hint .rotate-icon {
+    width: 64px;
+    height: 104px;
+    border: 3px solid #c4df82;
+    border-radius: 12px;
+    animation: rotate-phone 2.4s ease-in-out infinite;
+  }
+  html.is-touch #rotate-hint strong { font-size: 22px; color: #c9f276; }
+  html.is-touch #rotate-hint small { font-size: 12px; color: #a2ad9e; letter-spacing: .08em; font-family: var(--body); }
+}
+@keyframes rotate-phone {
+  0%, 20% { transform: rotate(0); }
+  60%, 100% { transform: rotate(-90deg); }
+}

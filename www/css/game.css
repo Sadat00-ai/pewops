@@ -1,0 +1,30 @@
+#stage {
+  position: relative;
+  width: min(1440px, calc(100vw - 36px), calc((100vh - 36px) * 1.6));
+  aspect-ratio: 16 / 10;
+  min-height: 510px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #0b120f;
+  border: 1px solid rgba(174, 201, 153, 0.2);
+  box-shadow: 0 28px 100px rgba(0, 0, 0, 0.66), 0 0 0 5px rgba(0, 0, 0, 0.15);
+}
+#stage::after {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  border: 1px solid rgba(217, 230, 190, 0.08);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.2);
+}
+#game { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; }
+#game.playing { cursor: none; }
+
+@media (max-width: 760px) and (orientation: portrait) {
+  #stage { width: 100%; min-height: 100vh; aspect-ratio: auto; overflow: visible; border: 0; }
+}
+@media (max-height: 620px) and (orientation: landscape) {
+  body { padding: 8px; }
+  #stage { width: min(calc(100vw - 16px), calc((100vh - 16px) * 1.6)); min-height: 0; }
+}

@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 620" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">PewOps operator squad</title>
+  <desc id="desc">Three original cartoon military game characters geared up for an arcade arena deployment.</desc>
+  <defs>
+    <linearGradient id="greenSuit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b4cc70"/><stop offset="1" stop-color="#506b3c"/></linearGradient>
+    <linearGradient id="greenHelmet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d2e28a"/><stop offset="1" stop-color="#6f8a46"/></linearGradient>
+    <linearGradient id="tanSuit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7b779"/><stop offset="1" stop-color="#8e7048"/></linearGradient>
+    <linearGradient id="blueSuit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7da5b3"/><stop offset="1" stop-color="#3f5a6e"/></linearGradient>
+    <linearGradient id="visor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f9d783"/><stop offset="1" stop-color="#d8894b"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="12"/></filter>
+  </defs>
+
+  <!-- soft arena lights and grounded shadows -->
+  <ellipse cx="462" cy="565" rx="330" ry="34" fill="#020705" opacity=".65" filter="url(#shadow)"/>
+  <circle cx="465" cy="265" r="230" fill="#9ec56b" opacity=".055"/>
+  <path d="M80 510h760" stroke="#b1d47a" stroke-opacity=".16" stroke-width="2" stroke-dasharray="8 13"/>
+  <path d="M128 168l25-25 25 25-25 25zM770 208l18-18 18 18-18 18z" fill="#f5b85a" opacity=".55"/>
+  <path d="M185 95l5 18 18 5-18 5-5 18-5-18-18-5 18-5zM735 95l4 14 14 4-14 4-4 14-4-14-14-4 14-4z" fill="#d0e88b" opacity=".7"/>
+
+  <!-- left operator: desert scout -->
+  <g transform="translate(82 126) rotate(-5 160 330)" stroke="#1a251d" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M105 360l-10 105 28 65 56 0 8-19-30-45 28-91z" fill="#544a37"/>
+    <path d="M184 369l37 91-5 72 56 0 18-19-21-70 1-91z" fill="#746043"/>
+    <path d="M105 493l-5 35-42 22q-12 7-4 19h104q15-8 8-21l-18-31z" fill="#3e3a31"/>
+    <path d="M223 498l3 30-20 24q-8 12 5 17h91q13-8 3-20l-43-42z" fill="#40392e"/>
+    <path d="M93 237q-23 27-22 75l26 83q64 27 136-2l5-102q-21-48-54-61z" fill="url(#tanSuit)"/>
+    <path d="M98 266l-45 53q-16 22 2 39l36 19 23-22-17-28 37-42z" fill="#b38d59"/>
+    <path d="M210 263l35 45q15 19 2 40l-24 34-26-15 13-35-29-35z" fill="#927447"/>
+    <path d="M75 346l-20 12q-15 13-2 25l32 16q16-3 17-20l-7-25z" fill="#bd9967"/>
+    <path d="M238 345l22 13q14 12 2 25l-22 20q-18 1-22-14l5-28z" fill="#c39c62"/>
+    <rect x="96" y="276" width="126" height="77" rx="25" fill="#907348" stroke-width="9"/>
+    <path d="M121 305h76M130 328h57" stroke="#d2b47c" stroke-width="8"/>
+    <path d="M129 184q2-48 60-50 61 2 66 55l-10 57q-23 27-74 18-43-8-48-47z" fill="#c99e68"/>
+    <path d="M104 187q-2-66 76-76 70 3 83 67l-16 26q-45-28-125-3z" fill="#a68b59"/>
+    <path d="M103 174q20-59 91-62 50 5 72 48l-2 20q-68-26-154 10z" fill="#d7b779"/>
+    <path d="M121 200q28-20 60-10l15 19q-27 25-64 10z" fill="#4c5c48" stroke-width="8"/>
+    <path d="M129 205l23 1M175 204l22-1" stroke="#f0cf89" stroke-width="7"/>
+    <path d="M135 235q33 22 65-3l-3 27q-29 24-58 0z" fill="#7d6647" stroke-width="8"/>
+    <path d="M146 258l-2 30 50 4 1-30" fill="#a47e50"/>
+    <path d="M225 270l45-25 22 21-39 52-35-11z" fill="#514a38"/>
+    <path d="M254 256l40-13 14 17-31 34" fill="#89714d"/>
+    <path d="M264 245l88-33 9 18-83 47z" fill="#252f29"/>
+    <path d="M345 209l56-21 7 16-56 23z" fill="#4c5945"/>
+    <path d="M282 250l18 54-20 10-18-53z" fill="#252f29"/>
+  </g>
+
+  <!-- right operator: navy assault -->
+  <g transform="translate(590 135) rotate(5 120 300)" stroke="#17232b" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M69 360l-5 112 22 59 52 0 11-19-24-47 24-100z" fill="#344958"/>
+    <path d="M141 373l40 93-7 66 53 0 16-18-20-72-2-84z" fill="#456173"/>
+    <path d="M81 496l-8 31-31 23q-10 12 3 18h95q14-9 3-22l-16-24z" fill="#293b43"/>
+    <path d="M179 497l3 28-23 26q-7 13 7 17h93q11-9 0-22l-38-43z" fill="#2b3c43"/>
+    <path d="M67 238q-20 32-13 81l27 78q60 27 127-1l1-107q-19-46-52-58z" fill="url(#blueSuit)"/>
+    <path d="M73 266l-46 54q-15 20 0 39l35 23 22-22-14-29 36-44z" fill="#507185"/>
+    <path d="M194 264l38 44q16 19 0 42l-25 31-25-16 13-32-32-37z" fill="#426071"/>
+    <path d="M42 347l-18 14q-14 13 0 25l29 16q15-5 14-20l-8-25z" fill="#c39170"/>
+    <path d="M220 346l23 12q14 10 4 24l-24 22q-18 0-21-15l6-27z" fill="#c39170"/>
+    <rect x="68" y="279" width="130" height="72" rx="22" fill="#385464" stroke-width="9"/>
+    <path d="M96 299h72M98 324h70" stroke="#7698a7" stroke-width="8"/>
+    <path d="M85 185q4-48 63-55 64 3 71 60l-10 54q-24 28-73 20-44-8-51-42z" fill="#bf8c6b"/>
+    <path d="M63 184q-3-66 79-77 74 4 91 68l-18 30q-53-29-140-1z" fill="#38566b"/>
+    <path d="M65 170q18-58 82-61 53 5 78 48l-4 19q-63-24-151 11z" fill="#6f9bad"/>
+    <path d="M83 199q31-20 63-10l14 20q-27 23-67 9z" fill="#273e4b" stroke-width="8"/>
+    <path d="M91 204l23 1M138 203l22 0" stroke="#b2d4db" stroke-width="7"/>
+    <path d="M100 234q31 22 66-3l-3 27q-32 23-61 0z" fill="#405b66" stroke-width="8"/>
+    <path d="M112 259l-2 30 49 4 2-30" fill="#8e6956"/>
+    <path d="M202 274l39-30 24 24-35 54-36-12z" fill="#304958"/>
+    <path d="M235 247l39-16 16 18-30 33" fill="#6a8997"/>
+    <path d="M247 248l78-25 8 18-78 39z" fill="#222d34"/>
+    <path d="M323 225l55-17 6 17-55 19z" fill="#4b6572"/>
+    <path d="M260 254l15 53-20 10-16-53z" fill="#202d34"/>
+  </g>
+
+  <!-- lead operator: olive unit captain -->
+  <g transform="translate(285 52)" stroke="#162118" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+    <!-- backpack and straps -->
+    <path d="M173 236q-31-18-43 15l-5 105q24 26 66 14l17-100q-6-28-35-34z" fill="#465c35"/>
+    <path d="M160 263l-5 71M185 268l-12 71" stroke="#91a95d" stroke-width="9"/>
+    <!-- legs -->
+    <path d="M126 397l-3 102 20 69q9 20 34 15l24-9-5-22-22-51 25-99z" fill="#536c3e"/>
+    <path d="M220 403l32 93-1 73q12 17 36 13l24-14-8-21-20-61 6-91z" fill="#6d874a"/>
+    <path d="M143 547l-12 28q-7 18 12 25h92q12-10-2-27l-31-30z" fill="#333e2c"/>
+    <path d="M248 549l3 25q-1 17 17 24h86q12-13-3-27l-31-28z" fill="#37432e"/>
+    <path d="M152 574h76M266 580h71" stroke="#879b5a" stroke-width="6"/>
+    <!-- torso -->
+    <path d="M113 235q-25 35-24 83l18 102q91 43 177 0l-2-114q-19-57-62-74z" fill="url(#greenSuit)"/>
+    <path d="M113 281l-51 60q-19 23 0 45l42 26 25-24-21-34 40-45z" fill="#789655"/>
+    <path d="M274 279l43 47q21 23 3 48l-31 40-29-18 18-39-38-40z" fill="#5f7946"/>
+    <path d="M62 369l-23 14q-17 12-4 30l31 22q18-1 22-19l-11-34z" fill="#bf926e"/>
+    <path d="M308 365l26 12q16 11 5 28l-29 32q-18 2-23-15l8-36z" fill="#c39470"/>
+    <!-- chest equipment -->
+    <path d="M119 281q69 27 139-2l-1 88q-70 31-134 0z" fill="#425a36" stroke-width="10"/>
+    <path d="M140 299h37v52h-37zM194 299h43v52h-43z" fill="#758d4e" stroke-width="7"/>
+    <path d="M147 313h22M201 313h28" stroke="#c4d782" stroke-width="6"/>
+    <path d="M178 236l14 35 17-33" fill="#d5bd8a" stroke-width="9"/>
+    <!-- neck and face -->
+    <path d="M159 196l-5 55q30 27 64-1l-5-57" fill="#b9815f"/>
+    <path d="M125 147q5-75 80-78 76 6 82 86l-13 63q-26 40-80 30-59-11-68-61z" fill="#c99772"/>
+    <!-- helmet shell -->
+    <path d="M107 154q-7-106 95-112 105 6 107 113l-22 28q-74-44-159 1z" fill="url(#greenHelmet)"/>
+    <path d="M112 130q22-78 93-80 68 4 93 67l-3 28q-91-33-181 9z" fill="#a8c86a"/>
+    <path d="M100 157q98-30 220 1l-4 23q-110-17-215 4z" fill="#536c3c"/>
+    <path d="M191 56l9-18 19 4 8 18" fill="#e0ea9b" stroke-width="9"/>
+    <!-- goggles -->
+    <path d="M129 160q37-26 73-5l8 27q-37 26-73 5z" fill="#263b36" stroke-width="9"/>
+    <path d="M222 154q34-21 67 4l-6 28q-34 22-65-5z" fill="#263b36" stroke-width="9"/>
+    <path d="M143 164l48 4M232 164l42 5" stroke="url(#visor)" stroke-width="9"/>
+    <path d="M207 172l15 1" stroke="#1b2a22" stroke-width="10"/>
+    <!-- face scarf -->
+    <path d="M135 203q66 28 131-1l-11 45q-56 38-108-1z" fill="#465d3e" stroke-width="9"/>
+    <path d="M151 222l25 8M196 231l29-5" stroke="#91a95d" stroke-width="6"/>
+    <!-- rifle angled across chest -->
+    <path d="M64 376l55-30 160-112 13 18-157 122-49 29z" fill="#27332a" stroke-width="12"/>
+    <path d="M255 229l72-48 15 16-70 51z" fill="#5c6a50" stroke-width="10"/>
+    <path d="M321 184l85-48 9 16-84 52z" fill="#1e2921" stroke-width="10"/>
+    <path d="M91 364l-26-18-25 18 23 36z" fill="#4d5d43"/>
+    <path d="M182 310l24 33-20 23-23-36z" fill="#667a4b"/>
+    <path d="M144 337l-15 41" stroke="#d0df91" stroke-width="6"/>
+  </g>
+</svg>
