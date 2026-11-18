@@ -1,6 +1,6 @@
 // touch.js - on-screen controls for phones and tablets (twin-stick layout).
 // Left side of the screen: move. Right side: aim, and the soldier fires while the stick is pushed.
-// Buttons: grenade, reload, next weapon, pause.
+// Buttons: grenade, reload, next weapon, power surge, dash, pause.
 // On desktop (mouse + keyboard) this file does nothing and Touch.enabled stays false.
 
 const Touch = (function () {
@@ -44,6 +44,8 @@ const Touch = (function () {
     '<button type="button" class="tbtn tbtn-grenade" data-t="grenade"><b>GRENADE</b></button>' +
     '<button type="button" class="tbtn tbtn-reload" data-t="reload"><b>RELOAD</b></button>' +
     '<button type="button" class="tbtn tbtn-weapon" data-t="weapon"><b>SWAP</b></button>' +
+    '<button type="button" class="tbtn tbtn-power" data-t="power"><b>POWER</b></button>' +
+    '<button type="button" class="tbtn tbtn-dash" data-t="dash"><b>DASH</b></button>' +
     '<button type="button" class="tbtn tbtn-pause" data-t="pause" aria-label="Pause"><span></span><span></span></button>';
   stage.appendChild(root);
 
@@ -119,6 +121,8 @@ const Touch = (function () {
     grenade: function () { throwGrenade(); },
     reload: function () { if (G && !G.player.dead) startReload(); },
     weapon: function () { cycleWeapon(); },
+    power: function () { activateSurge(); },
+    dash: function () { tryDash(); },
     pause: function () { pauseGame(); }
   };
   root.querySelectorAll(".tbtn").forEach(function (button) {
@@ -143,8 +147,31 @@ const Touch = (function () {
     api.aiming = false;
     api.firing = false;
   };
+  // the POWER and DASH buttons show a ring that fills up, and glow when they are ready
+  const powerButton = root.querySelector(".tbtn-power");
+  const dashButton = root.querySelector(".tbtn-dash");
+  const last = { power: -1, dash: -1, powerState: "", dashReady: null };
+  function refreshButtons() {
+    const p = G.player;
+    const s = p.surge;
+    const ready = !s.active && s.meter >= SURGE.full;
+    const powerDeg = Math.round((s.active ? Math.min(1, s.t / SURGE.baseTime) : s.meter / SURGE.full) * 120) * 3;
+    if (powerDeg !== last.power) { last.power = powerDeg; powerButton.style.setProperty("--p", powerDeg + "deg"); }
+    const powerState = s.active ? "active" : ready ? "ready" : "";
+    if (powerState !== last.powerState) {
+      last.powerState = powerState;
+      powerButton.classList.toggle("ready", powerState === "ready");
+      powerButton.classList.toggle("active", powerState === "active");
+    }
+    const dashDeg = Math.round((1 - p.dashCd / DASH.cooldown) * 120) * 3;
+    if (dashDeg !== last.dash) { last.dash = dashDeg; dashButton.style.setProperty("--p", dashDeg + "deg"); }
+    const dashReady = p.dashCd <= 0;
+    if (dashReady !== last.dashReady) { last.dashReady = dashReady; dashButton.classList.toggle("ready", dashReady); }
+  }
+
   api.sync = function () {
     const on = state === "playing";
+    if (on && shown && G) refreshButtons();
     if (on === shown) return;
     shown = on;
     root.hidden = !on;
