@@ -1,7 +1,16 @@
-// storage.js - local operator profile, campaign progress and personal records.
+// storage.js - local operator profile, campaign progress, credits, upgrades and personal records.
 
 const SAVE_KEY = "strikeforce-save-v2";
 const OLD_SAVE_KEY = "strikeforce-save-v1";
+const WEAPON_IDS = ["pistol", "rifle", "shotgun", "sniper"];
+const OP_UPGRADE_MAX = { hp: 5, charge: 5, grenades: 3, cores: 3 };
+const WEAPON_UPGRADE_MAX = 5;
+
+function defaultWeaponUp() {
+  const out = {};
+  WEAPON_IDS.forEach(function (id) { out[id] = { dmg: 0, mag: 0, rate: 0 }; });
+  return out;
+}
 
 function defaultSave() {
   return {
@@ -9,12 +18,26 @@ function defaultSave() {
     unlockedLevel: 1,
     unlockedWeapons: ["pistol", "rifle"],
     startWeapon: "pistol",
-    settings: { music: 0.35, sfx: 0.7 },
+    settings: { music: 0.35, sfx: 0.7, haptics: true, fps: 60, aimAssist: true, motion: true },
     profile: { callsign: "ROOKIE", avatar: "scout" },
     totalKills: 0,
     xp: 0,
-    scores: []
+    scores: [],
+    coins: 0,
+    upgrades: { hp: 0, charge: 0, grenades: 0, cores: 0 },
+    weaponUp: defaultWeaponUp(),
+    finalCleared: false,
+    tutorialDone: false,
+    daily: { day: "", missions: [] },
+    ach: {},
+    stats: { surges: 0, dashes: 0, cores: 0, bossKills: 0, coinsEarned: 0, lastStands: 0, bestCombo: 0 }
   };
+}
+
+function clampInt(value, lo, hi) {
+  let n = Math.floor(Number(value));
+  if (!isFinite(n)) n = lo;
+  return Math.max(lo, Math.min(hi, n));
 }
 
 function loadSave() {
@@ -41,8 +64,41 @@ function loadSave() {
 
   if (!Array.isArray(merged.unlockedWeapons)) merged.unlockedWeapons = base.unlockedWeapons.slice();
   if (!Array.isArray(merged.scores)) merged.scores = [];
-  if (!["scout", "desert", "navy", "crimson"].includes(merged.profile.avatar)) merged.profile.avatar = "scout";
+  if (["scout", "desert", "navy", "crimson"].indexOf(merged.profile.avatar) === -1) merged.profile.avatar = "scout";
   if (typeof merged.profile.callsign !== "string" || !merged.profile.callsign.trim()) merged.profile.callsign = "ROOKIE";
+
+  // settings (the last five were added in 2.3)
+  const s = merged.settings;
+  s.music = Math.max(0, Math.min(1, Number(s.music)));
+  if (!isFinite(s.music)) s.music = 0.35;
+  s.sfx = Math.max(0, Math.min(1, Number(s.sfx)));
+  if (!isFinite(s.sfx)) s.sfx = 0.7;
+  s.haptics = s.haptics !== false;
+  s.aimAssist = s.aimAssist !== false;
+  s.motion = s.motion !== false;
+  s.fps = [0, 30, 60].indexOf(Number(s.fps)) !== -1 ? Number(s.fps) : 60;
+
+  // credits, upgrades, missions and achievements (added in 2.3)
+  merged.coins = clampInt(merged.coins, 0, 99999999);
+  merged.upgrades = Object.assign({}, base.upgrades, merged.upgrades && typeof merged.upgrades === "object" ? merged.upgrades : {});
+  for (const id in OP_UPGRADE_MAX) merged.upgrades[id] = clampInt(merged.upgrades[id], 0, OP_UPGRADE_MAX[id]);
+  const wu = merged.weaponUp && typeof merged.weaponUp === "object" ? merged.weaponUp : {};
+  merged.weaponUp = defaultWeaponUp();
+  WEAPON_IDS.forEach(function (id) {
+    const src = wu[id] && typeof wu[id] === "object" ? wu[id] : {};
+    merged.weaponUp[id] = {
+      dmg: clampInt(src.dmg, 0, WEAPON_UPGRADE_MAX),
+      mag: clampInt(src.mag, 0, WEAPON_UPGRADE_MAX),
+      rate: clampInt(src.rate, 0, WEAPON_UPGRADE_MAX)
+    };
+  });
+  merged.finalCleared = merged.finalCleared === true;
+  merged.tutorialDone = merged.tutorialDone === true;
+  merged.ach = merged.ach && typeof merged.ach === "object" && !Array.isArray(merged.ach) ? merged.ach : {};
+  merged.stats = Object.assign({}, base.stats, merged.stats && typeof merged.stats === "object" ? merged.stats : {});
+  for (const key in base.stats) merged.stats[key] = Math.max(0, Number(merged.stats[key]) || 0);
+  const d = merged.daily;
+  merged.daily = d && typeof d === "object" && typeof d.day === "string" && Array.isArray(d.missions) ? d : { day: "", missions: [] };
 
   return merged;
 }
