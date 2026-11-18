@@ -14,89 +14,68 @@
   <link rel="stylesheet" href="css/lobby.css">
   <link rel="stylesheet" href="css/polish.css">
   <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/features.css">
 </head>
 <body>
   <div id="rotate-hint"><span class="rotate-icon"></span><strong>ROTATE YOUR PHONE</strong><small>PEWOPS IS PLAYED IN LANDSCAPE</small></div>
   <main id="stage" aria-label="PewOps game">
     <canvas id="game" aria-label="Game arena"></canvas>
 
-    <section id="menu" class="screen home-screen">
-      <header class="topbar">
-        <a class="brand" href="#menu" aria-label="PewOps home">
-          <span class="brand-mark"><i></i><i></i><i></i></span>
-          <span class="brand-copy"><strong>PEW<span>OPS</span></strong><small>ARCADE COMBAT <b>2.2</b></small></span>
-        </a>
-        <button class="profile-chip" type="button" data-action="profile" aria-label="Open player profile">
+    <section id="menu" class="screen lb">
+      <div class="lb-bg" aria-hidden="true"><i class="lb-grid"></i><i class="lb-radar"><b></b></i><i class="lb-glow"></i></div>
+
+      <header class="lb-top">
+        <button class="lb-profile" type="button" data-action="profile" aria-label="Open player profile">
           <span class="avatar avatar-scout" id="home-avatar"><span></span></span>
-          <span class="profile-chip-copy"><small>OPERATOR</small><strong id="home-callsign">ROOKIE</strong></span>
-          <span class="online-dot"></span>
+          <span class="lb-profile-info">
+            <strong id="home-callsign">ROOKIE</strong>
+            <small><b id="home-rank">RECRUIT</b><i id="home-xp">0 XP</i></small>
+            <span class="lb-xp"><em id="home-xp-bar"></em></span>
+          </span>
         </button>
+        <div class="lb-logo" role="img" aria-label="PewOps Arcade Combat"><strong>PEW<em>OPS</em></strong><small>ARCADE COMBAT</small></div>
+        <div class="lb-wallet">
+          <span class="lb-chip" aria-label="Credits"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.6"/></svg><b id="home-coins">0</b></span>
+          <button class="lb-icon-btn" type="button" data-action="settings" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg></button>
+        </div>
       </header>
 
-      <div class="home-content">
-        <div class="hero-copy">
-          <div class="eyebrow"><span class="eyebrow-line"></span> ARCADE COMBAT <span class="status-live">READY TO PLAY</span></div>
-          <div class="hero-kicker"><span class="kicker-icon">✦</span> YOUR NEXT DEPLOYMENT STARTS HERE</div>
-          <h1>LOCK. LOAD.<br><em>LET'S PLAY.</em></h1>
-          <p class="hero-description">Pick your fighter, tune your loadout and jump into the arena. Thirty operations are waiting. Your squad is counting on you.</p>
-          <div class="hero-actions">
-            <button class="btn btn-primary btn-large" data-action="campaign"><span class="btn-symbol play-symbol">▶</span><span><strong>PLAY CAMPAIGN</strong><small>30 MISSIONS · UNLOCK THE BATTLEFIELD</small></span><b class="btn-arrow">→</b></button>
-            <button class="btn btn-ghost btn-large" data-action="survival"><span class="btn-symbol">✚</span><span><strong>QUICK MATCH</strong><small>JUMP STRAIGHT INTO THE ACTION</small></span><b class="btn-arrow">→</b></button>
-          </div>
-          <div class="mode-links">
-            <button data-action="timeattack"><span>◷</span> TIME ATTACK</button>
-            <button data-action="training"><span>◎</span> TRAINING ARENA</button>
-          </div>
-          <div class="hero-footnote"><span class="footnote-star">★</span><span>SOLO PLAY</span><i></i><span>LOCAL PROGRESS</span><i></i><span class="kbd-only">NO DOWNLOAD REQUIRED</span><span class="touch-only">PLAYS OFFLINE</span></div>
+      <div class="lb-main">
+        <div class="lb-stage">
+          <div class="lb-tag"><span>LOCK. LOAD.</span><em>LET'S PLAY.</em></div>
+          <img class="lb-hero" src="assets/operator-squad.svg" alt="Three original cartoon-style PewOps operators ready for deployment">
+          <ul class="lb-pills">
+            <li><small>MISSIONS</small><b id="home-missions">01<span>/30</span></b></li>
+            <li><small>ELIMINATIONS</small><b id="home-kills">000</b></li>
+            <li><button type="button" data-action="weapons"><small>LOADOUT</small><b id="home-weapon">SERVICE PISTOL</b></button></li>
+          </ul>
         </div>
 
-        <aside class="home-side" aria-label="Operator and loadout overview">
-          <div class="showcase-scene">
-            <div class="scene-orbit scene-orbit-one"></div>
-            <div class="scene-orbit scene-orbit-two"></div>
-            <div class="scene-glow"></div>
-            <div class="scene-topline"><span><i class="status-pip"></i> SQUAD DEPLOYMENT</span><b>SECTOR 07</b></div>
-            <img class="operator-squad-art" src="assets/operator-squad.svg" alt="Three original cartoon-style PewOps operators ready for deployment">
-            <div class="scene-caption"><span class="scene-caption-tag">FIELD UNIT / 07</span><strong>READY FOR<br><em>ANYTHING.</em></strong><small>CHOOSE YOUR FIGHT. MAKE YOUR MARK.</small></div>
-            <div class="scene-coordinate">23° 48' N &nbsp; 90° 24' E <span>●</span></div>
+        <div class="lb-play">
+          <button class="lb-deploy" type="button" data-action="continue">
+            <span class="lb-deploy-top"><small id="home-continue-label">START CAMPAIGN</small><i id="home-continue-tag">ROOKIE</i></span>
+            <strong id="home-continue-name">OP 01 · RUSTED OUTPOST</strong>
+            <span class="lb-deploy-bar"><em id="home-campaign-bar"></em></span>
+            <span class="lb-deploy-go"><b>DEPLOY</b><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5l12.5 7.5L7 19.5z" fill="currentColor" stroke="none"/></svg></span>
+          </button>
+          <button class="lb-link" type="button" data-action="campaign"><span>MISSION MAP</span><b>→</b></button>
+          <div class="lb-modes">
+            <button type="button" class="lb-mode" data-action="survival"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 2.8V12c0 4.6-3.2 7.6-7.5 9-4.3-1.4-7.5-4.4-7.5-9V5.8z"/></svg><strong>QUICK MATCH</strong><small>ENDLESS WAVES</small></button>
+            <button type="button" class="lb-mode" data-action="timeattack"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 2"/></svg><strong>TIME ATTACK</strong><small>90 SECOND RUN</small></button>
+            <button type="button" class="lb-mode" data-action="training"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg><strong>TRAINING</strong><small>UNLIMITED AMMO</small></button>
           </div>
-
-          <div class="home-side-dashboard">
-            <div class="operator-card panel">
-              <div class="panel-heading"><span>YOUR OPERATOR</span><i><span class="status-pip"></span> ACTIVE</i></div>
-              <div class="operator-main">
-                <div class="operator-portrait avatar avatar-large avatar-scout" id="home-operator-avatar"><span></span><b></b></div>
-                <div class="operator-info"><small>FIELD RANK</small><h2 id="home-rank">RECRUIT</h2><p id="home-xp">0 XP EARNED</p></div>
-              </div>
-              <div class="operator-progress"><div class="progress-meta"><span>NEXT RANK</span><strong id="home-next-rank">100 XP</strong></div><div class="progress-track"><span id="home-xp-bar"></span></div></div>
-              <button class="text-action" data-action="profile">EDIT OPERATOR <b>↗</b></button>
-            </div>
-
-            <div class="side-quick-data">
-              <div class="stat-grid">
-                <div class="mini-stat panel"><span>MISSIONS</span><strong id="home-missions">01<span>/30</span></strong></div>
-                <div class="mini-stat panel"><span>ELIMINATIONS</span><strong id="home-kills">000</strong></div>
-              </div>
-              <div class="loadout-strip panel">
-                <div class="panel-heading"><span>ACTIVE LOADOUT</span><i>PRIMARY</i></div>
-                <div class="loadout-content"><div class="weapon-preview" id="home-weapon-icon">▰</div><div><small>WEAPON EQUIPPED</small><strong id="home-weapon">SERVICE PISTOL</strong></div><button class="icon-button" data-action="weapons" aria-label="Change weapon">↗</button></div>
-              </div>
-            </div>
-          </div>
-        </aside>
+        </div>
       </div>
 
-      <footer class="home-footer">
-        <div class="footer-status"><span class="status-pip"></span> SYSTEM ONLINE <i></i> LOCAL SAVE ACTIVE</div>
-        <nav class="footer-nav" aria-label="Main navigation">
-          <button data-action="weapons">ARSENAL</button>
-          <button data-action="profile">OPERATOR</button>
-          <button data-action="settings">SETTINGS</button>
-          <button data-action="leaderboard">RECORDS</button>
-          <button data-action="instructions">CONTROLS</button>
-        </nav>
-        <span class="version-label">PEWOPS 2.2 · CREATED BY SM SADAT</span>
-      </footer>
+      <nav class="lb-nav" aria-label="Main navigation">
+        <button type="button" data-action="weapons"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="M12 2.5v5M12 16.5v5M2.5 12h5M16.5 12h5"/></svg><span>ARSENAL</span></button>
+        <button type="button" data-action="shop"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 2L4.5 13.5h6L9.5 22l9-11.5h-6z" fill="currentColor" stroke="none"/></svg><span>UPGRADES</span><i class="lb-badge" id="badge-upgrades" hidden>!</i></button>
+        <button type="button" data-action="missions"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 4.8M3.5 12l1.2 1.2L7 10.8M3.5 18l1.2 1.2L7 16.8"/></svg><span>MISSIONS</span><i class="lb-badge" id="badge-missions" hidden>0</i></button>
+        <button type="button" data-action="leaderboard"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v5.5a5 5 0 01-10 0zM7 6H4v2a3.2 3.2 0 003.2 3.2M17 6h3v2a3.2 3.2 0 01-3.2 3.2M12 14.5V18M8 21h8M9.5 18h5"/></svg><span>RECORDS</span></button>
+        <button type="button" data-action="instructions"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7.5 10v5M5 12.5h5"/><circle cx="16" cy="11.5" r=".9" fill="currentColor"/><circle cx="18.2" cy="14" r=".9" fill="currentColor"/></svg><span>CONTROLS</span></button>
+        <span class="lb-version">PEWOPS 2.3 · BY SM SADAT</span>
+      </nav>
     </section>
 
     <section id="campaign" class="screen inner-screen" hidden>
@@ -147,20 +126,24 @@
     </section>
 
     <section id="settings" class="screen inner-screen" hidden>
-      <header class="screen-heading"><div><span class="eyebrow">SYSTEM / PREFERENCES</span><h2>GAME <em>SETTINGS</em></h2><p class="screen-intro">Tune audio levels and set up your preferred play experience.</p></div><div class="settings-stamp">CONFIG<br>02.2</div></header>
+      <header class="screen-heading"><div><span class="eyebrow">SYSTEM / PREFERENCES</span><h2>GAME <em>SETTINGS</em></h2><p class="screen-intro">Tune audio, performance and controls to suit your device.</p></div><div class="settings-stamp">CONFIG<br>02.3</div></header>
       <div class="settings-layout">
         <div class="settings-panel panel">
-          <div class="panel-heading"><span>AUDIO CONTROL</span><i>OUTPUT MIXER</i></div>
-          <label class="setting-row" for="music-vol"><span><strong>BACKGROUND MUSIC</strong><small>Ambient combat soundtrack</small></span><input id="music-vol" type="range" min="0" max="100" value="35"><output id="music-value">35%</output></label>
-          <label class="setting-row" for="sfx-vol"><span><strong>SOUND EFFECTS</strong><small>Weapons, impacts and interface sounds</small></span><input id="sfx-vol" type="range" min="0" max="100" value="70"><output id="sfx-value">70%</output></label>
+          <div class="panel-heading"><span>AUDIO</span><i>OUTPUT MIXER</i></div>
+          <label class="setting-row" for="music-vol"><span><strong>BACKGROUND MUSIC</strong><small>Menu, combat and boss themes</small></span><input id="music-vol" type="range" min="0" max="100" value="35"><output id="music-value">35%</output></label>
+          <label class="setting-row" for="sfx-vol"><span><strong>SOUND EFFECTS</strong><small>Weapons, impacts and interface</small></span><input id="sfx-vol" type="range" min="0" max="100" value="70"><output id="sfx-value">70%</output></label>
           <div class="setting-footnote">Move a slider to zero to mute that channel.</div>
         </div>
         <div class="settings-panel panel">
-          <div class="panel-heading"><span>GAMEPLAY</span><i>FIELD OPTIONS</i></div>
-          <div class="setting-info kbd-only"><span class="setting-icon">⌨</span><div><strong>KEYBOARD + MOUSE</strong><small>WASD movement · mouse aim and fire</small></div><span class="setting-status">ACTIVE</span></div>
-          <div class="setting-info touch-only"><span class="setting-icon">◉</span><div><strong>TOUCH CONTROLS</strong><small>Left thumb moves · right thumb aims and fires</small></div><span class="setting-status">ACTIVE</span></div>
-          <div class="setting-info"><span class="setting-icon">▤</span><div><strong>LOCAL PROGRESS</strong><small>Campaign, loadout and records saved automatically</small></div><span class="setting-status">ON</span></div>
-          <div class="setting-info"><span class="setting-icon">★</span><div><strong>PEWOPS 2.2</strong><small>Game created by SM Sadat</small></div><span class="setting-status">ABOUT</span></div>
+          <div class="panel-heading"><span>PERFORMANCE</span><i>BATTERY SAVER</i></div>
+          <div class="setting-block"><span><strong>FRAME RATE</strong><small>Lower it to save battery</small></span><div class="seg" role="group" aria-label="Frame rate" data-setting="fps"><button type="button" data-value="30">30</button><button type="button" data-value="60">60</button><button type="button" data-value="0">MAX</button></div></div>
+          <div class="setting-block"><span><strong>MOTION EFFECTS</strong><small>Lobby animation, dust and parallax</small></span><div class="seg" role="group" aria-label="Motion effects" data-setting="motion"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
+        </div>
+        <div class="settings-panel panel">
+          <div class="panel-heading"><span>CONTROLS</span><i>FIELD OPTIONS</i></div>
+          <div class="setting-block touch-only"><span><strong>HAPTICS</strong><small>Vibrate when shooting and taking hits</small></span><div class="seg" role="group" aria-label="Haptics" data-setting="haptics"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
+          <div class="setting-block touch-only"><span><strong>AIM ASSIST</strong><small>Nudges your aim toward close enemies</small></span><div class="seg" role="group" aria-label="Aim assist" data-setting="aimAssist"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
+          <div class="setting-info kbd-only"><span class="setting-icon">⌨</span><div><strong>KEYBOARD + MOUSE</strong><small>WASD move · mouse aim · SHIFT dash · Q power</small></div><span class="setting-status">ACTIVE</span></div>
           <button class="btn btn-danger reset-button" data-action="reset">RESET ALL LOCAL PROGRESS</button>
         </div>
       </div>
@@ -173,14 +156,18 @@
         <div class="control-group kbd-only"><span class="control-number">01</span><div><h3>MOVEMENT</h3><p>Move around the arena and use cover to break enemy line of sight.</p><div class="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>OR</span><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div></div></div>
         <div class="control-group kbd-only"><span class="control-number">02</span><div><h3>AIM & FIRE</h3><p>Move your mouse to aim. Hold the left mouse button to fire continuously.</p><div class="keycaps"><kbd>MOUSE</kbd><span> AIM</span><kbd>LMB</kbd><span> FIRE</span></div></div></div>
         <div class="control-group kbd-only"><span class="control-number">03</span><div><h3>WEAPON HANDLING</h3><p>Reload, switch weapon or throw a grenade when enemies close in.</p><div class="keycaps"><kbd>R</kbd><span> RELOAD</span><kbd>1–4</kbd><span> WEAPONS</span><kbd>G</kbd><span> GRENADE</span></div></div></div>
-        <div class="control-group kbd-only"><span class="control-number">04</span><div><h3>PAUSE</h3><p>Pause the action at any time. The arena stops while the pause menu is open.</p><div class="keycaps"><kbd>ESC</kbd><span> PAUSE / RESUME</span></div></div></div>
+        <div class="control-group kbd-only"><span class="control-number">04</span><div><h3>DASH</h3><p>A quick dodge with brief invulnerability. It recharges in two seconds.</p><div class="keycaps"><kbd>SHIFT</kbd><span> DASH</span></div></div></div>
+        <div class="control-group kbd-only"><span class="control-number">05</span><div><h3>POWER SURGE</h3><p>When the meter is full, grow bigger, hit harder and take less damage.</p><div class="keycaps"><kbd>Q</kbd><span>OR</span><kbd>SPACE</kbd></div></div></div>
+        <div class="control-group kbd-only"><span class="control-number">06</span><div><h3>PAUSE</h3><p>Pause the action at any time. The arena stops while the pause menu is open.</p><div class="keycaps"><kbd>ESC</kbd><span> PAUSE / RESUME</span></div></div></div>
       
         <div class="control-group touch-only"><span class="control-number">01</span><div><h3>MOVE</h3><p>Drag anywhere on the left side of the screen. Push further to run faster.</p><div class="keycaps"><span>LEFT THUMB</span></div></div></div>
         <div class="control-group touch-only"><span class="control-number">02</span><div><h3>AIM &amp; FIRE</h3><p>Drag on the right side to aim. Your soldier fires automatically while you hold the stick out.</p><div class="keycaps"><span>RIGHT THUMB</span></div></div></div>
         <div class="control-group touch-only"><span class="control-number">03</span><div><h3>WEAPON BUTTONS</h3><p>Use the buttons around the sticks to throw a grenade, reload or swap to your next unlocked weapon.</p><div class="keycaps"><span>GRENADE · RELOAD · SWAP</span></div></div></div>
-        <div class="control-group touch-only"><span class="control-number">04</span><div><h3>PAUSE</h3><p>Tap the pause button at the top-right, or use your phone's back button.</p><div class="keycaps"><span>BACK BUTTON = PAUSE</span></div></div></div>
+        <div class="control-group touch-only"><span class="control-number">04</span><div><h3>DASH</h3><p>Tap DASH for a quick dodge with brief invulnerability.</p><div class="keycaps"><span>DASH BUTTON</span></div></div></div>
+        <div class="control-group touch-only"><span class="control-number">05</span><div><h3>POWER SURGE</h3><p>When the meter is full, tap POWER to grow bigger and hit harder.</p><div class="keycaps"><span>POWER BUTTON</span></div></div></div>
+        <div class="control-group touch-only"><span class="control-number">06</span><div><h3>PAUSE</h3><p>Tap the pause button at the top-right, or use your phone's back button.</p><div class="keycaps"><span>BACK BUTTON = PAUSE</span></div></div></div>
       </div>
-      <p class="manual-tip"><strong>FIELD TIP:</strong> Green supply crates restore health. Orange crates replenish ammunition and grenades. Keep moving.</p>
+      <p class="manual-tip"><strong>FIELD TIP:</strong> Green supply crates restore health. Orange crates replenish ammunition and grenades. Glowing power cores boost damage, speed and shields. Keep moving.</p>
       <div class="screen-actions"><span class="legend">TRAINING MODE HAS UNLIMITED LIVES AND AMMO</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
     </section>
 
@@ -190,8 +177,39 @@
       <div class="screen-actions"><span class="legend">PERSONAL BESTS · LOCAL LEADERBOARD</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
     </section>
 
+    <section id="shop" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">QUARTERMASTER / PERMANENT UPGRADES</span><h2>UPGRADE <em>BAY</em></h2><p class="screen-intro">Spend credits earned in the field. Upgrades stay with you in every mission.</p></div><div class="credit-pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.6"/></svg><b id="shop-coins">0</b><small>CREDITS</small></div></header>
+      <div class="shop-layout">
+        <div class="shop-panel panel"><div class="panel-heading"><span>OPERATOR</span><i>ALL MISSIONS</i></div><div id="shop-operator" class="up-list"></div></div>
+        <div class="shop-panel panel"><div class="panel-heading"><span>WEAPON TUNING</span><i id="shop-weapon-stats">&nbsp;</i></div><div id="shop-weapon-tabs" class="seg shop-tabs" role="group" aria-label="Choose weapon"></div><div id="shop-weapon" class="up-list"></div></div>
+      </div>
+      <div class="screen-actions"><span class="legend" id="shop-note">EARN CREDITS BY ELIMINATING ENEMIES AND CLEARING MISSIONS</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="missions" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">DAILY OPS / SERVICE MEDALS</span><h2>MISSIONS &amp; <em>MEDALS</em></h2><p class="screen-intro">Three new daily missions every day. Medals are earned once and pay credits.</p></div><div class="records-stamp">DAILY<br>OPS</div></header>
+      <div class="missions-layout">
+        <div class="panel missions-panel"><div class="panel-heading"><span>DAILY MISSIONS</span><i id="daily-day">TODAY</i></div><div id="daily-list" class="daily-list"></div></div>
+        <div class="panel missions-panel"><div class="panel-heading"><span>MEDALS</span><i id="ach-count">0 / 0</i></div><ul id="ach-list" class="ach-list"></ul></div>
+      </div>
+      <div class="screen-actions"><span class="legend">DAILY MISSIONS REFRESH AT MIDNIGHT</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="tutorial" class="screen modal-screen" hidden>
+      <div class="modal-card panel tut-card">
+        <span class="eyebrow">QUICK BRIEFING</span><h2>WELCOME TO <em>THE FIELD</em></h2>
+        <ul class="tut-list">
+          <li><b>01</b><span><strong>MOVE &amp; SHOOT</strong><small class="kbd-only">WASD to move, mouse to aim, hold left click to fire.</small><small class="touch-only">Left thumb moves, right thumb aims and fires.</small></span></li>
+          <li><b>02</b><span><strong>DASH</strong><small class="kbd-only">Press SHIFT for a quick dodge. You cannot be hit while dashing.</small><small class="touch-only">Tap DASH for a quick dodge. You cannot be hit while dashing.</small></span></li>
+          <li><b>03</b><span><strong>POWER SURGE</strong><small class="kbd-only">Kills fill the meter. When it is full, press Q or SPACE to grow bigger, hit harder and take less damage.</small><small class="touch-only">Kills fill the meter. When it is full, tap POWER to grow bigger, hit harder and take less damage.</small></span></li>
+          <li><b>04</b><span><strong>POWER CORES</strong><small>Grab glowing cores for shields, damage, speed and more. Low health charges your meter twice as fast.</small></span></li>
+        </ul>
+        <button class="btn btn-primary btn-large tut-go" type="button" data-action="tutorialGo"><span class="btn-symbol play-symbol">▶</span><span><strong>GOT IT, DEPLOY</strong></span><b class="btn-arrow">→</b></button>
+      </div>
+    </section>
+
     <section id="pause" class="screen modal-screen" hidden>
-      <div class="modal-card panel"><span class="eyebrow">TACTICAL PAUSE</span><h2>MISSION <em>ON HOLD</em></h2><p>Take a breath, operator. The arena is standing by.</p><nav class="list modal-actions"><button class="btn btn-primary" data-action="resume">RESUME DEPLOYMENT <b>↗</b></button><button class="btn btn-ghost" data-action="restart">RESTART MISSION</button><button class="btn btn-ghost" data-action="quit">RETURN TO BASE</button></nav><small class="modal-hint">PRESS ESC TO RESUME</small></div>
+      <div class="modal-card panel"><span class="eyebrow">TACTICAL PAUSE</span><h2>MISSION <em>ON HOLD</em></h2><p>Take a breath, operator. The arena is standing by.</p><div class="pause-mix"><label for="pause-music-vol"><span>MUSIC</span><input id="pause-music-vol" type="range" min="0" max="100" value="35"></label><label for="pause-sfx-vol"><span>EFFECTS</span><input id="pause-sfx-vol" type="range" min="0" max="100" value="70"></label></div><nav class="list modal-actions"><button class="btn btn-primary" data-action="resume">RESUME DEPLOYMENT <b>↗</b></button><button class="btn btn-ghost" data-action="restart">RESTART MISSION</button><button class="btn btn-ghost" data-action="quit">RETURN TO BASE</button></nav><small class="modal-hint">PRESS ESC TO RESUME</small></div>
     </section>
 
     <section id="end" class="screen modal-screen" hidden>
