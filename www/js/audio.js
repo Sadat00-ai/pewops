@@ -7,6 +7,8 @@ const Sound = {
   music: null,
   timer: null,
   step: 0,
+  theme: "",
+  surge: false,
 
   init() {
     if (this.ctx) {
@@ -90,6 +92,34 @@ const Sound = {
       case "die":       this.noise(0.3, 0.5, 1200); this.tone(200, 0.3, "sawtooth", 0.2, 40); break;
       case "hurt":      this.tone(110, 0.15, "square", 0.3, 60); break;
       case "explosion": this.noise(0.7, 1, 900); this.tone(90, 0.6, "sine", 0.5, 25); break;
+      case "surgeUp":
+        this.tone(110, 0.6, "sawtooth", 0.32, 900);
+        this.tone(220, 0.55, "square", 0.12, 1400);
+        this.noise(0.4, 0.5, 6500);
+        break;
+      case "surgeDown": this.tone(700, 0.5, "triangle", 0.22, 70); break;
+      case "tick":      this.tone(950, 0.04, "square", 0.1); break;
+      case "ready":
+        this.tone(660, 0.09, "sine", 0.25);
+        setTimeout(() => { if (this.ctx) this.tone(990, 0.14, "sine", 0.25); }, 90);
+        break;
+      case "dash":      this.noise(0.12, 0.3, 5200); this.tone(260, 0.1, "triangle", 0.14, 720); break;
+      case "shield":    this.tone(720, 0.1, "sine", 0.2, 1100); break;
+      case "coin":
+        this.tone(1180, 0.05, "square", 0.07);
+        setTimeout(() => { if (this.ctx) this.tone(1580, 0.07, "square", 0.07); }, 45);
+        break;
+      case "core":
+        this.tone(440, 0.08, "triangle", 0.22);
+        setTimeout(() => { if (this.ctx) this.tone(660, 0.08, "triangle", 0.22); }, 70);
+        setTimeout(() => { if (this.ctx) this.tone(880, 0.14, "triangle", 0.22); }, 140);
+        break;
+      case "achieve":
+        this.tone(523, 0.1, "square", 0.12);
+        setTimeout(() => { if (this.ctx) this.tone(659, 0.1, "square", 0.12); }, 100);
+        setTimeout(() => { if (this.ctx) this.tone(784, 0.1, "square", 0.12); }, 200);
+        setTimeout(() => { if (this.ctx) this.tone(1047, 0.25, "square", 0.12); }, 300);
+        break;
       case "pickup":
         this.tone(520, 0.08, "sine", 0.2);
         setTimeout(() => { if (this.ctx) this.tone(780, 0.1, "sine", 0.2); }, 70);
@@ -97,10 +127,17 @@ const Sound = {
     }
   },
 
-  // a simple looping bass line
-  startMusic() {
-    if (!this.ctx || this.timer) return;
-    this.timer = setInterval(() => this.tick(), 240);
+  // Looping music. Themes: "menu" (calm), "combat" (driving bass), "boss" (fast and tense).
+  // While a Power Surge is active a bright arpeggio is layered on top.
+  startMusic(theme) {
+    if (!this.ctx) return;
+    theme = theme || this.theme || "combat";
+    if (this.timer && this.theme === theme) return;
+    this.stopMusic();
+    this.theme = theme;
+    this.step = 0;
+    const speed = { menu: 340, combat: 240, boss: 170 }[theme] || 240;
+    this.timer = setInterval(() => this.tick(), speed);
   },
 
   stopMusic() {
@@ -108,12 +145,32 @@ const Sound = {
     this.timer = null;
   },
 
+  setSurge(on) { this.surge = !!on; },
+
   tick() {
-    const bass = [55, 55, 65.4, 55, 73.4, 55, 65.4, 49];
-    const note = bass[this.step % 8];
-    this.tone(note, 0.22, "sawtooth", 0.35, null, this.music);
-    if (this.step % 4 === 0) this.tone(120, 0.18, "sine", 0.5, 40, this.music);
-    if (this.step % 8 === 4) this.tone(note * 4, 0.1, "square", 0.08, null, this.music);
+    if (!this.ctx) return;
+    const s = this.step;
+    if (this.theme === "menu") {
+      const arp = [110, 164.8, 196, 246.9, 196, 164.8, 130.8, 164.8];
+      this.tone(arp[s % 8], 0.3, "triangle", 0.18, null, this.music);
+      if (s % 8 === 0) this.tone(55, 0.9, "sine", 0.4, null, this.music);
+    } else if (this.theme === "boss") {
+      const bass = [55, 58.3, 55, 65.4, 55, 58.3, 49, 61.7];
+      const note = bass[s % 8];
+      this.tone(note, 0.16, "sawtooth", 0.38, null, this.music);
+      if (s % 2 === 0) this.tone(120, 0.14, "sine", 0.5, 40, this.music);
+      if (s % 4 === 3) this.tone(note * 6, 0.08, "square", 0.08, null, this.music);
+    } else {
+      const bass = [55, 55, 65.4, 55, 73.4, 55, 65.4, 49];
+      const note = bass[s % 8];
+      this.tone(note, 0.22, "sawtooth", 0.35, null, this.music);
+      if (s % 4 === 0) this.tone(120, 0.18, "sine", 0.5, 40, this.music);
+      if (s % 8 === 4) this.tone(note * 4, 0.1, "square", 0.08, null, this.music);
+    }
+    if (this.surge && this.theme !== "menu") {
+      const arp = [440, 554.4, 659.3, 880, 659.3, 554.4];
+      this.tone(arp[s % 6], 0.09, "square", 0.07, null, this.music);
+    }
     this.step++;
   }
 };
