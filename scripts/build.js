@@ -12,6 +12,7 @@ const root = path.join(__dirname, "..");
 const androidDir = path.join(root, "android");
 const isWin = process.platform === "win32";
 const syncOnly = process.argv.includes("--sync-only");
+const release = process.argv.includes("--release");   // unsigned release APK + AAB (signed afterwards by the release workflow)
 const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
 
 function step(text) { console.log("\n=== " + text + " ==="); }
@@ -73,6 +74,21 @@ if (!process.env.JAVA_HOME) {
 step("5/5 Building the APK (the first build downloads Gradle and takes several minutes)");
 const gradlew = isWin ? "gradlew.bat" : "./gradlew";
 if (!isWin) { try { fs.chmodSync(path.join(androidDir, "gradlew"), 0o755); } catch (error) { /* ignore */ } }
+
+if (release) {
+  run(gradlew, ["assembleRelease", "bundleRelease"], androidDir, env);
+  const out = path.join(androidDir, "app", "build", "outputs");
+  const apk = path.join(out, "apk", "release", "app-release-unsigned.apk");
+  const aab = path.join(out, "bundle", "release", "app-release.aab");
+  if (!fs.existsSync(apk) || !fs.existsSync(aab)) fail("Release build finished but the unsigned APK/AAB was not found under " + out);
+  const dir = path.join(root, "dist", "unsigned");
+  fs.mkdirSync(dir, { recursive: true });
+  fs.copyFileSync(apk, path.join(dir, "app-release-unsigned.apk"));
+  fs.copyFileSync(aab, path.join(dir, "app-release.aab"));
+  console.log("\nUnsigned release files are in dist/unsigned/ (they are signed in the next step).");
+  process.exit(0);
+}
+
 run(gradlew, ["assembleDebug"], androidDir, env);
 
 const built = path.join(androidDir, "app", "build", "outputs", "apk", "debug", "app-debug.apk");
