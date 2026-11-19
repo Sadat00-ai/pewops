@@ -3,7 +3,7 @@
 **App name:** PewOps: Arcade Combat
 **Creator / developer:** SM Sadat
 **Category:** Games › Action
-**Version:** 2.2.0
+**Version:** 2.3.0
 **Package ID:** com.smsadat.pewops
 **Orientation:** Landscape
 **Internet needed:** No (plays fully offline)
@@ -15,7 +15,7 @@ Fast arcade military shooter — 30 missions, survival and time attack. Offline.
 
 **PEWOPS — LOCK. LOAD. LET'S PLAY.**
 
-PewOps is a fast, colourful top-down arcade shooter, designed and created by **SM Sadat**. Pick your operator, tune your loadout and drop into the arena. Thirty operations are waiting — and your squad is counting on you.
+PewOps is a fast, colourful top-down arcade shooter, designed and created by **SM Sadat**. Pick your operator, tune your loadout and drop into the arena. Thirty operations are waiting — charge your Power Surge, grow, and take the field.
 
 **GAME MODES**
 • **Campaign** — 30 hand-built operations across five combat theaters: urban streets, desert, warehouse, woodland and industrial zones. Clear a mission to unlock the next.
@@ -24,9 +24,11 @@ PewOps is a fast, colourful top-down arcade shooter, designed and created by **S
 • **Training Arena** — unlimited ammo and no damage. Test every weapon at your own pace.
 
 **FEATURES**
-• Smooth twin-stick touch controls: move with your left thumb, aim and fire with your right.
+• Smooth touch controls: move with your left thumb, aim with your right, and shoot with the dedicated FIRE button.
 • Four weapons — Pistol, Assault Rifle, Shotgun and Sniper Rifle — unlocked as you progress.
-• Grenades, health crates and ammo supplies.
+• **Power Surge** — kills charge your power meter. Unleash it to grow bigger, hit harder and shrug off damage. Low on health? A full meter can save you with a Last Stand.
+• Glowing power cores, a dash dodge, shields, grenades, health crates and ammo supplies.
+• Earn credits and spend them on permanent operator and weapon upgrades. Daily missions and medals keep every session fresh.
 • Smart enemies that use cover, flank and snipe: Grunts, Runners, Heavies, Snipers and Bosses.
 • Operator profile with your own callsign, four uniform colours, XP and eight ranks from Recruit to Commander.
 • Personal records board and automatic progress saving.
@@ -34,18 +36,18 @@ PewOps is a fast, colourful top-down arcade shooter, designed and created by **S
 • Plays completely offline. No ads, no accounts, no data collection.
 
 **CONTROLS**
-Left stick — move · Right stick — aim and fire · Buttons — grenade, reload, swap weapon, pause.
+Left stick — move · Right stick — aim · FIRE button — shoot · Buttons — power surge, dash, grenade, reload, swap weapon, pause.
 
 Download PewOps and show the arena what you've got.
 
 *Created by SM Sadat.*
 
-## What's new in 2.2.0
-• First Android release with full touch controls
-• Larger, clearer on-screen HUD for phones
-• Fixed grenade distance and particle speed on 90/120 Hz screens
-• Mission XP bonus is now paid only the first time a mission is cleared
-• Android back button pauses the game
+## What's new in 2.3.0
+• Power Surge: charge, grow and dominate
+• Power cores, shields, dash and a three-phase boss fight
+• New lobby, Upgrade Bay, daily missions and medals
+• Haptics, frame-rate saver and button-size setting
+• Smoother movement, muzzle flashes, shell casings and new music
 
 ## Tags
 arcade shooter, top-down shooter, military, offline game, action, survival, twin-stick

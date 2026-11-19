@@ -1,0 +1,161 @@
+/* PEWOPS 2.3 - upgrade bay, daily missions, tutorial, settings controls, pause mixer and the new touch buttons. */
+
+/* ---------- shared bits ---------- */
+.seg { display: inline-flex; border: 1px solid var(--line-bright); background: rgba(14, 22, 18, 0.85); }
+.seg button {
+  min-height: 30px;
+  padding: 0 13px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--heading);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.seg button:hover { color: var(--text); }
+.seg button.on { background: linear-gradient(120deg, #c0d88b, #8da95e); color: #10180f; }
+
+.credit-pill { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid var(--line-bright); background: rgba(20, 31, 25, 0.85); font-family: var(--heading); }
+.credit-pill .ic { width: 18px; height: 18px; color: var(--orange); }
+.credit-pill b { font-size: 22px; font-weight: 900; letter-spacing: 0.04em; }
+.credit-pill small { font-size: 9px; letter-spacing: 0.2em; color: var(--muted); }
+
+/* ---------- upgrade bay ---------- */
+.shop-layout, .missions-layout { display: grid; flex: 1 1 auto; min-height: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 14px 0 12px; }
+.shop-panel, .missions-panel { display: flex; flex-direction: column; gap: 8px; min-height: 0; padding: 14px 16px; }
+.up-list, .daily-list, .ach-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(157, 187, 106, 0.4) transparent; }
+.shop-tabs { align-self: flex-start; flex-wrap: wrap; }
+.up-row { display: grid; grid-template-columns: minmax(0, 1fr) auto 88px; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.up-info strong { display: block; font-family: var(--heading); font-size: 14px; font-weight: 800; letter-spacing: 0.1em; }
+.up-info small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+.up-pips { display: flex; gap: 4px; }
+.up-pips i { width: 9px; height: 15px; border: 1px solid var(--line-bright); background: rgba(158, 181, 150, 0.12); transform: skewX(-14deg); }
+.up-pips i.on { border-color: var(--olive-bright); background: var(--olive-bright); box-shadow: 0 0 8px rgba(196, 223, 130, 0.45); }
+.up-buy { justify-content: center; min-height: 34px; padding: 0 8px; font-size: 12px; }
+.up-buy:disabled { opacity: 0.5; cursor: default; }
+
+/* ---------- daily missions and medals ---------- */
+.daily-list { display: flex; flex-direction: column; gap: 10px; }
+.daily-row { display: grid; grid-template-columns: minmax(0, 1fr) 122px; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); background: rgba(14, 22, 18, 0.55); }
+.daily-row.done { border-color: var(--orange); box-shadow: inset 3px 0 0 var(--orange); }
+.daily-row.claimed { opacity: 0.5; }
+.daily-main strong { display: block; margin-bottom: 7px; font-family: var(--heading); font-size: 14px; font-weight: 800; letter-spacing: 0.06em; }
+.daily-bar { display: block; height: 6px; background: rgba(158, 181, 150, 0.16); }
+.daily-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--olive), var(--olive-bright)); }
+.daily-main small { display: block; margin-top: 5px; color: var(--muted); font-size: 9px; letter-spacing: 0.08em; }
+.daily-claim { justify-content: center; min-height: 34px; padding: 0 8px; font-size: 11px; }
+.daily-claim:disabled { opacity: 0.55; cursor: default; }
+.ach-list { display: grid; align-content: start; gap: 6px; list-style: none; }
+.ach-list li { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); background: rgba(14, 22, 18, 0.5); opacity: 0.6; }
+.ach-list li.done { border-color: var(--line-bright); opacity: 1; }
+.ach-list li i { color: var(--dim); font-size: 17px; font-style: normal; text-align: center; }
+.ach-list li.done i { color: var(--orange); }
+.ach-list li strong { display: block; font-family: var(--heading); font-size: 13px; font-weight: 800; letter-spacing: 0.08em; }
+.ach-list li small { display: block; color: var(--muted); font-size: 9px; }
+.ach-list li b { color: var(--orange); font-family: var(--heading); font-size: 13px; letter-spacing: 0.06em; }
+
+/* ---------- tutorial ---------- */
+.tut-card { width: min(560px, 90%); padding: 24px 28px 22px; text-align: left; }
+.tut-card h2 { margin: 4px 0 14px; font-family: var(--heading); font-size: 30px; font-weight: 900; letter-spacing: 0.04em; }
+.tut-card h2 em { color: var(--olive-bright); font-style: normal; }
+.tut-list { display: grid; gap: 11px; margin-bottom: 16px; list-style: none; }
+.tut-list li { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: start; gap: 12px; }
+.tut-list li > b { color: var(--orange); font-family: var(--heading); font-size: 24px; font-weight: 900; line-height: 1; }
+.tut-list strong { display: block; font-family: var(--heading); font-size: 15px; font-weight: 800; letter-spacing: 0.1em; }
+.tut-list small { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.tut-go { width: 100%; }
+
+/* ---------- settings (three panels) ---------- */
+.settings-layout { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.setting-row { grid-template-columns: minmax(0, 1fr) 42px; gap: 8px 10px; padding: 14px 0; }
+.setting-row > span { grid-column: 1 / -1; }
+.setting-row input { grid-column: 1; width: 100%; accent-color: var(--olive-bright); }
+.setting-row output { grid-column: 2; text-align: right; }
+.setting-block { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.setting-block strong { display: block; font-family: var(--heading); font-size: 13px; font-weight: 800; letter-spacing: 0.1em; }
+.setting-block small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+.settings-panel .reset-button { width: 100%; margin-top: 14px; justify-content: center; }
+
+/* ---------- controls page: six groups in three columns ---------- */
+.controls-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* ---------- pause menu mixer ---------- */
+.pause-mix { display: grid; gap: 8px; margin: 12px 0 14px; text-align: left; }
+.pause-mix label { display: grid; grid-template-columns: 72px minmax(0, 1fr); align-items: center; gap: 10px; color: var(--muted); font-family: var(--heading); font-size: 12px; font-weight: 800; letter-spacing: 0.12em; }
+.pause-mix input { width: 100%; accent-color: var(--olive-bright); }
+
+/* ---------- touch: button size setting, power and dash buttons ---------- */
+#touch-ui {
+  --stick: calc(clamp(96px, 32vh, 150px) * var(--hud, 1));
+  --btn: calc(clamp(44px, 14vh, 62px) * var(--hud, 1));
+}
+
+.tbtn-power, .tbtn-dash {
+  --ring: #f0a64b;
+  --p: 0deg;
+  border: 0;
+  background:
+    radial-gradient(circle, rgba(10, 20, 14, 0.92) 0 62%, transparent 64%),
+    conic-gradient(var(--ring) var(--p), rgba(198, 239, 112, 0.22) 0);
+}
+.tbtn-power {
+  width: calc(var(--btn) * 1.25);
+  height: calc(var(--btn) * 1.25);
+  right: calc(30px + env(safe-area-inset-right));
+  bottom: calc(var(--stick) + 26px + var(--btn) + 14px + env(safe-area-inset-bottom));
+}
+.tbtn-power.ready { --ring: #ffd34d; color: #ffe27a; animation: tbtn-ready 0.7s ease-in-out infinite alternate; }
+.tbtn-power.active { --ring: #ffd34d; color: #ffe27a; }
+.tbtn-dash {
+  --ring: #c5eb78;
+  left: calc(34px + env(safe-area-inset-left));
+  bottom: calc(var(--stick) + 26px + var(--btn) + 14px + env(safe-area-inset-bottom));
+}
+.tbtn-dash.ready { color: #c5eb78; }
+@keyframes tbtn-ready {
+  from { transform: scale(1); filter: drop-shadow(0 0 3px rgba(255, 211, 77, 0.5)); }
+  to { transform: scale(1.08); filter: drop-shadow(0 0 11px rgba(255, 211, 77, 0.95)); }
+}
+.no-motion .tbtn-power.ready { animation: none; }
+
+/* dedicated FIRE button: big, next to the aim stick; its ring shows the magazine and refills while reloading */
+.tbtn-fire {
+  --ring: #ff7a4d;
+  --p: 360deg;
+  width: calc(var(--btn) * 1.5);
+  height: calc(var(--btn) * 1.5);
+  right: calc(var(--stick) + 30px + env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  border: 0;
+  color: #ffd9c9;
+  background:
+    radial-gradient(circle, rgba(60, 20, 12, 0.9) 0 62%, transparent 64%),
+    conic-gradient(var(--ring) var(--p), rgba(255, 122, 77, 0.22) 0);
+}
+.tbtn-fire b { font-size: clamp(9px, 2.8vh, 13px); letter-spacing: 0.06em; }
+.tbtn-fire.pressed { background: radial-gradient(circle, rgba(255, 122, 77, 0.85) 0 62%, transparent 64%), conic-gradient(var(--ring) var(--p), rgba(255, 122, 77, 0.22) 0); color: #2a0c05; transform: scale(0.95); }
+.tbtn-fire.reloading { --ring: #f0a64b; }
+/* the grenade moves up so it never sits under the FIRE button */
+.tbtn-grenade { bottom: calc(16px + var(--btn) * 1.5 + 12px + env(safe-area-inset-bottom)); }
+
+/* notches and rounded corners: keep every screen inside the safe area */
+html.is-touch .screen { top: env(safe-area-inset-top, 0px); bottom: env(safe-area-inset-bottom, 0px); }
+html.is-touch .lb { padding-top: calc(var(--u) * 1.8); }
+
+/* short landscape phones: inner pages already scroll, so let the new panels grow */
+@media (orientation: landscape) and (max-height: 520px) {
+  html.is-touch .shop-layout, html.is-touch .missions-layout { flex: none; }
+  html.is-touch .up-list, html.is-touch .daily-list, html.is-touch .ach-list { overflow: visible; }
+  html.is-touch .credit-pill { padding: 5px 10px; }
+  html.is-touch .credit-pill b { font-size: 17px; }
+  html.is-touch .up-row { grid-template-columns: minmax(0, 1fr) auto 80px; gap: 8px; }
+  html.is-touch .tut-card { padding: 14px 20px; }
+  html.is-touch .tut-card h2 { margin-bottom: 8px; font-size: 22px; }
+  html.is-touch .tut-list { gap: 6px; margin-bottom: 10px; }
+  html.is-touch .tut-list li > b { font-size: 18px; }
+  html.is-touch .tut-list small { font-size: 10px; }
+  html.is-touch .settings-layout { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
