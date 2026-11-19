@@ -6,6 +6,7 @@
 - **Last Stand:** with a full meter, a fatal hit triggers the Surge automatically and you survive. Kills while on low health charge the meter twice as fast.
 - **Power cores:** five glowing pick-ups spawn on the map or drop from enemies: Damage and Speed (3 levels each), Shield, Magnet and Surge.
 - **Shield bar**, plus **0.5 s of invulnerability after every hit** (you blink while it lasts).
+- **Dedicated FIRE button** on phones: hold it to shoot; with no aim stick held it turns toward the nearest enemy. The ring on it shows your magazine and refills while reloading. Stick auto-fire can be turned off in Settings.
 - **Dash** (SHIFT / DASH button): quick dodge with brief invulnerability and a 2 second cooldown.
 - **Precise movement:** speed now ramps up and down in about a tenth of a second, analog stick strength is respected, and there are a ground ring, a movement chevron, dust and (on phones) a gentle aim assist.
 - **Smarter enemies:** flankers swing wide, wounded shooters duck behind cover, and enemies wander while you respawn.
