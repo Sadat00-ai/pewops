@@ -1,0 +1,12 @@
+{
+  "appId": "com.smsadat.pewops",
+  "appName": "PewOps",
+  "webDir": "www",
+  "backgroundColor": "#070c09",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

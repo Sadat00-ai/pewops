@@ -1,0 +1,42 @@
+:root {
+  color-scheme: dark;
+  --ink: #090f0d;
+  --deep: #101915;
+  --panel: rgba(20, 30, 25, 0.94);
+  --panel-soft: rgba(27, 39, 32, 0.88);
+  --line: rgba(158, 181, 150, 0.16);
+  --line-bright: rgba(183, 205, 133, 0.34);
+  --olive: #9dbb6a;
+  --olive-bright: #c4df82;
+  --orange: #f0a64b;
+  --text: #eef1e8;
+  --muted: #a2ad9e;
+  --dim: #667367;
+  --red: #e16b59;
+  --heading: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --body: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100%; }
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 18px;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 50% -15%, rgba(99, 126, 74, 0.23), transparent 55%),
+    linear-gradient(135deg, #080d0b 0%, #111a15 50%, #080d0b 100%);
+  font-family: var(--body);
+}
+button, input { font: inherit; }
+button { color: inherit; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { color: #121811; background: var(--olive-bright); }
+
+@media (max-width: 760px) and (orientation: portrait) {
+  body { padding: 0; overflow: auto; display: block; }
+}
