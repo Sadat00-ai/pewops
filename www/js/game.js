@@ -412,6 +412,18 @@ function assistAim(p, angle) {
   return best === null ? angle : angle + best * 0.5;
 }
 
+// direction to the nearest enemy the soldier can see, or null; used when FIRE is held without aiming
+function nearestTargetAngle(p) {
+  let best = null;
+  let bestDist = 700;
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    const d = Math.hypot(e.x - p.x, e.y - p.y);
+    if (d < bestDist && lineClear(p.x, p.y, e.x, e.y)) { bestDist = d; best = e; }
+  }
+  return best ? Math.atan2(best.y - p.y, best.x - p.x) : null;
+}
+
 function updatePlayer(dt) {
   const p = G.player;
 
@@ -461,7 +473,13 @@ function updatePlayer(dt) {
   if (Touch.enabled) {
     // the aim stick sets the facing direction; the aim point sits ahead of the soldier
     let angle = Touch.aimAngle;
-    if (save.settings.aimAssist && Touch.aiming) angle = assistAim(p, angle);
+    if (Touch.fireBtn && !Touch.aiming) {
+      // FIRE held with no aim stick: turn toward the nearest enemy, otherwise keep the last direction
+      const target = nearestTargetAngle(p);
+      if (target !== null) angle = Touch.aimAngle = target;
+    } else if (save.settings.aimAssist && Touch.aiming) {
+      angle = assistAim(p, angle);
+    }
     p.angle = angle;
     mouse.x = Math.max(0, Math.min(W, p.x + Math.cos(p.angle) * 170));
     mouse.y = Math.max(0, Math.min(H, p.y + Math.sin(p.angle) * 170));
@@ -473,7 +491,8 @@ function updatePlayer(dt) {
     p.reload -= dt;
     if (p.reload <= 0) finishReload();
   }
-  if (mouse.down || Touch.firing) shoot();
+  const stickFires = Touch.firing && save.settings.stickFire !== false;
+  if (mouse.down || stickFires || Touch.fireBtn) shoot();
 }
 
 function shoot() {
@@ -1632,7 +1651,7 @@ function render() {
     }
     if (p.reload > 0) drawBar(p.x - 18, p.y + BASE_RADIUS * sc + 8, 36, 4, 1 - p.reload / w.reload, "#e8892b");
 
-    if (Touch.enabled && Touch.aiming && state === "playing") {   // faint sight line while aiming on a phone
+    if (Touch.enabled && (Touch.aiming || Touch.fireBtn) && state === "playing") {   // faint sight line while aiming on a phone
       ctx.strokeStyle = "rgba(255, 208, 116, 0.35)";
       ctx.lineWidth = 1.5;
       ctx.setLineDash([6, 8]);
