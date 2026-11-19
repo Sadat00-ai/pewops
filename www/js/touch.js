@@ -1,6 +1,6 @@
 // touch.js - on-screen controls for phones and tablets (twin-stick layout).
-// Left side of the screen: move. Right side: aim, and the soldier fires while the stick is pushed.
-// Buttons: grenade, reload, next weapon, power surge, dash, pause.
+// Left side of the screen: move. Right side: aim stick. A dedicated FIRE button shoots while it is held.
+// Buttons: fire, grenade, reload, next weapon, power surge, dash, pause.
 // On desktop (mouse + keyboard) this file does nothing and Touch.enabled stays false.
 
 const Touch = (function () {
@@ -14,6 +14,7 @@ const Touch = (function () {
     aimAngle: -Math.PI / 2,               // last aim direction in radians
     aiming: false,                        // true while the aim stick is held
     firing: false,                        // true while the aim stick is pushed far enough
+    fireBtn: false,                       // true while the FIRE button is held
     sync: function () {},
     reset: function () {}
   };
@@ -41,6 +42,7 @@ const Touch = (function () {
     '<div class="tzone tzone-aim"></div>' +
     '<div class="tstick tstick-move"><i></i></div>' +
     '<div class="tstick tstick-aim"><i></i></div>' +
+    '<button type="button" class="tbtn tbtn-fire" data-t="fire" aria-label="Fire"><b>FIRE</b></button>' +
     '<button type="button" class="tbtn tbtn-grenade" data-t="grenade"><b>GRENADE</b></button>' +
     '<button type="button" class="tbtn tbtn-reload" data-t="reload"><b>RELOAD</b></button>' +
     '<button type="button" class="tbtn tbtn-weapon" data-t="weapon"><b>SWAP</b></button>' +
@@ -125,7 +127,7 @@ const Touch = (function () {
     dash: function () { tryDash(); },
     pause: function () { pauseGame(); }
   };
-  root.querySelectorAll(".tbtn").forEach(function (button) {
+  root.querySelectorAll(".tbtn:not(.tbtn-fire)").forEach(function (button) {
     button.addEventListener("pointerdown", function (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -138,6 +140,29 @@ const Touch = (function () {
     });
   });
 
+  // FIRE is a hold button: it shoots for as long as the finger stays down, even if the finger slides off it
+  const fireButton = root.querySelector(".tbtn-fire");
+  let firePointer = null;
+  function releaseFire() {
+    firePointer = null;
+    api.fireBtn = false;
+    fireButton.classList.remove("pressed");
+  }
+  fireButton.addEventListener("pointerdown", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (state !== "playing" || !G || firePointer !== null) return;
+    firePointer = event.pointerId;
+    try { fireButton.setPointerCapture(firePointer); } catch (error) { /* some WebViews refuse capture */ }
+    api.fireBtn = true;
+    fireButton.classList.add("pressed");
+  });
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach(function (name) {
+    fireButton.addEventListener(name, function (event) {
+      if (event.pointerId === firePointer) releaseFire();
+    });
+  });
+
   // ---- show only while a mission is running ----
   let shown = false;
   api.reset = function () {
@@ -146,11 +171,12 @@ const Touch = (function () {
     api.moveMag = 0;
     api.aiming = false;
     api.firing = false;
+    releaseFire();
   };
   // the POWER and DASH buttons show a ring that fills up, and glow when they are ready
   const powerButton = root.querySelector(".tbtn-power");
   const dashButton = root.querySelector(".tbtn-dash");
-  const last = { power: -1, dash: -1, powerState: "", dashReady: null };
+  const last = { power: -1, dash: -1, powerState: "", dashReady: null, ammo: -1, reloading: null };
   function refreshButtons() {
     const p = G.player;
     const s = p.surge;
@@ -167,6 +193,14 @@ const Touch = (function () {
     if (dashDeg !== last.dash) { last.dash = dashDeg; dashButton.style.setProperty("--p", dashDeg + "deg"); }
     const dashReady = p.dashCd <= 0;
     if (dashReady !== last.dashReady) { last.dashReady = dashReady; dashButton.classList.toggle("ready", dashReady); }
+
+    // the FIRE ring shows the magazine, and fills up again while reloading
+    const w = G.weapons[p.weapon];
+    const reloading = p.reload > 0;
+    const ammoFrac = reloading ? 1 - p.reload / w.reload : G.ammo[p.weapon].mag / w.mag;
+    const ammoDeg = Math.round(Math.max(0, Math.min(1, ammoFrac)) * 120) * 3;
+    if (ammoDeg !== last.ammo) { last.ammo = ammoDeg; fireButton.style.setProperty("--p", ammoDeg + "deg"); }
+    if (reloading !== last.reloading) { last.reloading = reloading; fireButton.classList.toggle("reloading", reloading); }
   }
 
   api.sync = function () {
