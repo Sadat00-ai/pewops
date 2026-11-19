@@ -3,7 +3,7 @@
 ## 0. Before you start (one time)
 1. Make a Google Play developer account (play.google.com/console, one-time $25 fee, identity verification).
    New personal accounts usually must run a **closed test with at least 12 testers for 14 days** before production — check "Testing requirements" in the Console.
-2. Put your real contact email in `docs/index.html` (replace both `YOUR_EMAIL_HERE`).
+2. Contact email in `docs/index.html` is already set (sadatrahi008@gmail.com); change it there if you want a different one.
 3. Turn on the privacy-policy page: GitHub repo → **Settings → Pages** → Source: *Deploy from a branch* → Branch `main`, folder `/docs` → Save.
    Your policy URL will be `https://sadat00-ai.github.io/pewops/` — paste it into Play Console → App content → Privacy policy.
 
