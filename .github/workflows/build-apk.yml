@@ -20,7 +20,9 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - uses: android-actions/setup-android@v3
+      # GitHub's Ubuntu runners already include the Android SDK; we only accept its licences
+      - name: Accept Android SDK licences
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
       - name: Build debug APK
         run: node scripts/build.js
