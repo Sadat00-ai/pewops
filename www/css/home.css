@@ -6,7 +6,7 @@
   --u: clamp(5px, min(1vh, 0.62vw), 10px);
   --cut: calc(var(--u) * 1.3);
   --hot: #ff9d3d;
-  --fs-xs: max(calc(var(--u) * 1.4), 7.5px);
+  --fs-xs: max(calc(var(--u) * 1.4), 8px);
   --fs-sm: max(calc(var(--u) * 1.7), 9px);
   --fs-md: max(calc(var(--u) * 2.1), 11px);
   display: grid;
@@ -170,7 +170,30 @@
 .lb-pills b span { font-size: 0.6em; color: var(--muted); }
 
 /* ---------- play column ---------- */
-.lb-play { display: flex; flex-direction: column; justify-content: center; gap: calc(var(--u) * 1.3); min-height: 0; min-width: 0; }
+.lb-play { display: flex; flex-direction: column; justify-content: space-between; gap: calc(var(--u) * 1.3); min-height: 0; min-width: 0; }
+.lb-cta { display: flex; flex-direction: column; gap: calc(var(--u) * 1.1); }
+
+.lb-daily {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.7);
+  padding: calc(var(--u) * 1.3) calc(var(--u) * 1.7);
+  border: 0;
+  border-left: max(calc(var(--u) * 0.45), 3px) solid var(--hot);
+  background: linear-gradient(100deg, rgba(48, 38, 22, 0.85), rgba(20, 31, 25, 0.85));
+  color: var(--text);
+  text-align: left;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.lb-daily:hover { filter: brightness(1.15); transform: translateX(-2px); }
+.lb-daily-top { display: flex; align-items: center; justify-content: space-between; gap: calc(var(--u) * 1); }
+.lb-daily-top small { font-family: var(--heading); font-size: var(--fs-xs); font-weight: 800; letter-spacing: 0.2em; color: var(--hot); }
+.lb-daily-top i { font-family: var(--heading); font-size: var(--fs-sm); font-style: normal; font-weight: 800; letter-spacing: 0.08em; color: var(--olive-bright); }
+.lb-daily strong { overflow: hidden; font-family: var(--heading); font-size: calc(var(--u) * 2.4); font-weight: 800; letter-spacing: 0.04em; line-height: 1.05; white-space: nowrap; text-overflow: ellipsis; }
+.lb-daily-bar { display: block; height: max(calc(var(--u) * 0.5), 3px); background: rgba(158, 181, 150, 0.2); }
+.lb-daily-bar em { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--hot), #ffd34d); transition: width 0.6s ease; }
 
 .lb-deploy {
   position: relative;
@@ -325,4 +348,8 @@
 }
 @media (max-width: 760px) {
   .lb-version { display: none; }
+  .lb-main { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+  .lb-deploy strong { font-size: calc(var(--u) * 3.2); }
+  .lb-mode strong { font-size: calc(var(--u) * 1.7); letter-spacing: 0.03em; }
+  .lb-daily strong { font-size: calc(var(--u) * 2.1); }
 }
