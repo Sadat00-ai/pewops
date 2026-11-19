@@ -75,6 +75,21 @@ const UI = {
     missionsBadge.textContent = claimable;
     get("badge-upgrades").hidden = !Progress.canAfford();
 
+    // the lobby shows the daily mission that is closest to being finished
+    const daily = save.daily.missions;
+    const next = daily.find(function (m) { return !m.claimed && m.progress < m.target; }) || daily.find(function (m) { return !m.claimed; });
+    if (next) {
+      get("home-daily-label").textContent = next.progress >= next.target ? "READY TO CLAIM" : "TODAY'S MISSION";
+      get("home-daily-text").textContent = next.text;
+      get("home-daily-reward").textContent = "+" + next.reward + " CR";
+      get("home-daily-bar").style.width = Math.min(100, next.progress / next.target * 100) + "%";
+    } else {
+      get("home-daily-label").textContent = "TODAY'S MISSION";
+      get("home-daily-text").textContent = "All daily missions complete";
+      get("home-daily-reward").textContent = "DONE";
+      get("home-daily-bar").style.width = "100%";
+    }
+
     get("home-avatar").className = "avatar avatar-" + save.profile.avatar;
 
     const profileAvatar = document.getElementById("profile-avatar");
