@@ -16,7 +16,7 @@ Status of the "2D Android shooting game" checklist.
 | Enemies | Waves, enemy types, AI | Done (flanking, cover-seeking, wandering) |
 | Enemies | Boss battles | Done (three phases, boss health bar) |
 | Enemies | Loot | Done (health, ammo, credits, power cores) |
-| Touch | Thumbsticks, buttons, haptics | Done |
+| Touch | Thumbsticks, dedicated FIRE button, buttons, haptics | Done (hold FIRE to shoot; auto-targets the nearest enemy when no aim stick is held) |
 | Touch | Resizable HUD | Done (button size S / M / L). Moving buttons is not supported. |
 | UI | Menus, HUD, pause, results, shop, tutorial | Done |
 | Look | Casings, muzzle flash, particles, shake, hit-stop, parallax dust | Done |
