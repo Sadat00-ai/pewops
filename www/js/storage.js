@@ -18,7 +18,7 @@ function defaultSave() {
     unlockedLevel: 1,
     unlockedWeapons: ["pistol", "rifle"],
     startWeapon: "pistol",
-    settings: { music: 0.35, sfx: 0.7, haptics: true, fps: 60, aimAssist: true, motion: true, hud: 100 },
+    settings: { music: 0.35, sfx: 0.7, haptics: true, fps: 60, aimAssist: true, motion: true, hud: 100, stickFire: true },
     profile: { callsign: "ROOKIE", avatar: "scout" },
     totalKills: 0,
     xp: 0,
@@ -76,6 +76,7 @@ function loadSave() {
   s.haptics = s.haptics !== false;
   s.aimAssist = s.aimAssist !== false;
   s.motion = s.motion !== false;
+  s.stickFire = s.stickFire !== false;
   s.fps = [0, 30, 60].indexOf(Number(s.fps)) !== -1 ? Number(s.fps) : 60;
   s.hud = [85, 100, 115].indexOf(Number(s.hud)) !== -1 ? Number(s.hud) : 100;
 
