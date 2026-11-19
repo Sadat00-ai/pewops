@@ -42,6 +42,14 @@ if (!fs.existsSync(androidDir)) {
     fs.writeFileSync(file, xml);
   }
   done.push("landscape orientation lock");
+
+  // vibration (haptics) needs this permission; it is a normal permission, so Android never asks the player
+  xml = fs.readFileSync(file, "utf8");
+  if (!/android\.permission\.VIBRATE/.test(xml)) {
+    xml = xml.replace("</manifest>", '    <uses-permission android:name="android.permission.VIBRATE" />\n</manifest>');
+    fs.writeFileSync(file, xml);
+  }
+  done.push("vibrate permission (haptics)");
 })();
 
 // 2) MainActivity: fullscreen immersive mode, keep screen awake, draw into the notch area
