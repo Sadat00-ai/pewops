@@ -98,6 +98,7 @@ const UI = {
 
   applySettings() {
     document.documentElement.classList.toggle("no-motion", !save.settings.motion);
+    document.documentElement.style.setProperty("--hud", String(save.settings.hud / 100));    // on-screen button size
     document.querySelectorAll(".seg[data-setting]").forEach(function (group) {
       const key = group.dataset.setting;
       const current = String(typeof save.settings[key] === "boolean" ? (save.settings[key] ? 1 : 0) : save.settings[key]);
