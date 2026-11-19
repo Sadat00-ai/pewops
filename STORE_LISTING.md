@@ -24,7 +24,7 @@ PewOps is a fast, colourful top-down arcade shooter, designed and created by **S
 • **Training Arena** — unlimited ammo and no damage. Test every weapon at your own pace.
 
 **FEATURES**
-• Smooth twin-stick touch controls: move with your left thumb, aim and fire with your right.
+• Smooth touch controls: move with your left thumb, aim with your right, and shoot with the dedicated FIRE button.
 • Four weapons — Pistol, Assault Rifle, Shotgun and Sniper Rifle — unlocked as you progress.
 • **Power Surge** — kills charge your power meter. Unleash it to grow bigger, hit harder and shrug off damage. Low on health? A full meter can save you with a Last Stand.
 • Glowing power cores, a dash dodge, shields, grenades, health crates and ammo supplies.
@@ -36,7 +36,7 @@ PewOps is a fast, colourful top-down arcade shooter, designed and created by **S
 • Plays completely offline. No ads, no accounts, no data collection.
 
 **CONTROLS**
-Left stick — move · Right stick — aim and fire · Buttons — power surge, dash, grenade, reload, swap weapon, pause.
+Left stick — move · Right stick — aim · FIRE button — shoot · Buttons — power surge, dash, grenade, reload, swap weapon, pause.
 
 Download PewOps and show the arena what you've got.
 
