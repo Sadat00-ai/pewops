@@ -32,3 +32,6 @@ Status of the "2D Android shooting game" checklist.
 - Surge lasts 12 s (up to 16 s with kills). Size x1.4, hitbox x1.25, damage x1.5, fire rate x1.2, damage taken x0.7, speed x1.1.
 - Dash: 0.18 s, 2 s cooldown, 0.3 s invulnerability.
 - Credits: 2-6 per enemy (boss 60) plus a mission bonus of 40 + 5 per mission (half on replays).
+
+## How this was tested
+The game logic, every menu screen and the touch layout were run in a real Chromium browser (desktop and phone-sized screens): Surge, Last Stand, cores, shield, dash, boss phases, pooling, saves from 2.2, shop, daily missions, settings and button overlap checks. The Android build itself is verified by the GitHub Actions workflow on this branch.
