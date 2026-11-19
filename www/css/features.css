@@ -87,7 +87,12 @@
 .pause-mix label { display: grid; grid-template-columns: 72px minmax(0, 1fr); align-items: center; gap: 10px; color: var(--muted); font-family: var(--heading); font-size: 12px; font-weight: 800; letter-spacing: 0.12em; }
 .pause-mix input { width: 100%; accent-color: var(--olive-bright); }
 
-/* ---------- touch: power and dash buttons ---------- */
+/* ---------- touch: button size setting, power and dash buttons ---------- */
+#touch-ui {
+  --stick: calc(clamp(96px, 32vh, 150px) * var(--hud, 1));
+  --btn: calc(clamp(44px, 14vh, 62px) * var(--hud, 1));
+}
+
 .tbtn-power, .tbtn-dash {
   --ring: #f0a64b;
   --p: 0deg;
