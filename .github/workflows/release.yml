@@ -78,12 +78,12 @@ jobs:
           if-no-files-found: error
 
       # Attach the signed files to a GitHub release (Releases page). Every version keeps its own release,
-      # so old builds stay downloadable. Building an older ref never becomes the "latest" release.
+      # so old builds stay downloadable. The release is created as a draft; publish it from the Releases page
+      # (publishing creates the version tag, which this workflow's token is not allowed to do).
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           DRAFT: ${{ inputs.draft }}
-          OLD_BUILD: ${{ inputs.ref != '' }}
         run: |
           set -e
           V=$(node -p "require('./package.json').version")
@@ -93,6 +93,5 @@ jobs:
           gh release delete "v$V" --yes --cleanup-tag 2>/dev/null || true
           FLAGS=""
           if [ "$DRAFT" = "true" ]; then FLAGS="$FLAGS --draft"; fi
-          if [ "$OLD_BUILD" = "true" ]; then FLAGS="$FLAGS --latest=false"; fi
           gh release create "v$V" dist/PewOps-*-release.aab dist/PewOps-*-release.apk \
             $FLAGS --target "$SHA" --title "PewOps $V" --notes-file "$RUNNER_TEMP/notes.md"
