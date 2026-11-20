@@ -1,6 +1,8 @@
 // main.js - starts everything once the page has loaded
 
 UI.init();
+if (window.Intro) Intro.play();      // opening animation, then the lobby
+else UI.show("menu");
 requestAnimationFrame(function (now) {
   lastTime = now;
   loop(now);
