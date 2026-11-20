@@ -98,6 +98,7 @@ const UI = {
 
   applySettings() {
     document.documentElement.classList.toggle("no-motion", !save.settings.motion);
+    document.documentElement.classList.toggle("vivid", !!save.settings.vivid);               // HDR-style colour boost
     document.documentElement.style.setProperty("--hud", String(save.settings.hud / 100));    // on-screen button size
     document.querySelectorAll(".seg[data-setting]").forEach(function (group) {
       const key = group.dataset.setting;
@@ -425,6 +426,7 @@ const UI = {
         save.settings[key] = typeof defaultSave().settings[key] === "boolean" ? value === 1 : value;
         writeSave();
         UI.applySettings();
+        if (key === "resolution") resizeGameCanvas();
         Sound.init();
         Sound.play("switch");
         if (key === "haptics" && save.settings.haptics) Haptics.buzz(30);
