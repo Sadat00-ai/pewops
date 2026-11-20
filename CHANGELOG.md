@@ -1,5 +1,10 @@
 # PewOps Android edition
 
+## 2.4.0 (Display and intro update)
+- **Opening animation:** a short animated intro (logo slam, shockwave rings, tagline) plays before the lobby. Tap, press any key or use SKIP to jump straight in. It can be turned off in Settings.
+- **New display settings:** graphics quality (low / medium / high), resolution (50% / 75% / 100% / native), HDR-style colour boost, and frame rate up to 90 and 120 FPS. Phones cannot output real HDR from a web canvas, so the colour option is a look, not a display mode.
+- Settings reorganised into Audio, Display and Controls panels.
+
 ## 2.3.0 (Power Surge update)
 **Gameplay**
 - **Power Surge:** kills charge a meter. When it is full, tap POWER (or press Q / Space) to grow up to 40% bigger for about 12 seconds: +50% damage, +20% fire rate, 30% less damage taken, a speed boost, piercing bullets and a small heal on every kill. Starting a Surge sends out a shockwave that hurts nearby enemies and clears enemy bullets. Kills during a Surge extend it.
