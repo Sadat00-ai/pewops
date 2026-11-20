@@ -8,6 +8,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -63,3 +65,16 @@ jobs:
             dist/PewOps-*-release.aab
             dist/PewOps-*-release.apk
           if-no-files-found: error
+
+      # Also attach the files to a draft GitHub release (Releases page), so they are easy to find.
+      # A draft is only visible to people with access to the repository.
+      - name: Create draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          V=$(node -p "require('./package.json').version")
+          gh release delete "v$V" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "v$V" dist/PewOps-*-release.aab dist/PewOps-*-release.apk \
+            --draft --target "$GITHUB_SHA" --title "PewOps $V" \
+            --notes "Signed Play Store bundle (.aab) and signed APK. See CHANGELOG.md for what is new."
