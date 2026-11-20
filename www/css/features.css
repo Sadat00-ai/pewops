@@ -159,3 +159,7 @@ html.is-touch .lb { padding-top: calc(var(--u) * 1.8); }
   html.is-touch .tut-list small { font-size: 10px; }
   html.is-touch .settings-layout { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* HDR-style colours (Settings): a small contrast and saturation lift on the game canvas.
+   Phones cannot output real HDR from a web canvas, so this is a look, not a display mode. */
+html.vivid #game { filter: contrast(1.08) saturate(1.25) brightness(1.03); }
