@@ -4,6 +4,15 @@ name: Build signed release (Play Store)
 # Needs 4 repository secrets - see RELEASE_GUIDE.md.
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git branch, tag or commit to build. Leave empty to build the latest main."
+        required: false
+        default: ""
+      draft:
+        description: "Create the GitHub release as a draft (only you can see it)"
+        type: boolean
+        default: true
 
 jobs:
   release:
@@ -23,6 +32,8 @@ jobs:
           done
 
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
 
       - uses: actions/setup-node@v4
         with:
@@ -66,15 +77,22 @@ jobs:
             dist/PewOps-*-release.apk
           if-no-files-found: error
 
-      # Also attach the files to a draft GitHub release (Releases page), so they are easy to find.
-      # A draft is only visible to people with access to the repository.
-      - name: Create draft GitHub release
+      # Attach the signed files to a GitHub release (Releases page). Every version keeps its own release,
+      # so old builds stay downloadable. Building an older ref never becomes the "latest" release.
+      - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+          DRAFT: ${{ inputs.draft }}
+          OLD_BUILD: ${{ inputs.ref != '' }}
         run: |
           set -e
           V=$(node -p "require('./package.json').version")
+          SHA=$(git rev-parse HEAD)
+          awk -v v="$V" '$0 ~ "^## "v {f=1; print; next} f && /^## /{exit} f' CHANGELOG.md > "$RUNNER_TEMP/notes.md" || true
+          [ -s "$RUNNER_TEMP/notes.md" ] || echo "PewOps $V - signed Play Store bundle (.aab) and signed APK." > "$RUNNER_TEMP/notes.md"
           gh release delete "v$V" --yes --cleanup-tag 2>/dev/null || true
+          FLAGS=""
+          if [ "$DRAFT" = "true" ]; then FLAGS="$FLAGS --draft"; fi
+          if [ "$OLD_BUILD" = "true" ]; then FLAGS="$FLAGS --latest=false"; fi
           gh release create "v$V" dist/PewOps-*-release.aab dist/PewOps-*-release.apk \
-            --draft --target "$GITHUB_SHA" --title "PewOps $V" \
-            --notes "Signed Play Store bundle (.aab) and signed APK. See CHANGELOG.md for what is new."
+            $FLAGS --target "$SHA" --title "PewOps $V" --notes-file "$RUNNER_TEMP/notes.md"
