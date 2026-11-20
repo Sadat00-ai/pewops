@@ -16,13 +16,24 @@
   <link rel="stylesheet" href="css/mobile.css">
   <link rel="stylesheet" href="css/home.css">
   <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/intro.css">
 </head>
 <body>
   <div id="rotate-hint"><span class="rotate-icon"></span><strong>ROTATE YOUR PHONE</strong><small>PEWOPS IS PLAYED IN LANDSCAPE</small></div>
   <main id="stage" aria-label="PewOps game">
     <canvas id="game" aria-label="Game arena"></canvas>
 
-    <section id="menu" class="screen lb">
+    <section id="intro" class="screen intro" aria-label="PewOps intro">
+      <div class="in-bg" aria-hidden="true"><i class="in-vignette"></i><i class="in-streak s1"></i><i class="in-streak s2"></i><i class="in-streak s3"></i></div>
+      <p class="in-presents">SM SADAT PRESENTS</p>
+      <div class="in-logo" role="img" aria-label="PewOps"><span class="in-word in-pew">PEW</span><span class="in-word in-ops">OPS</span><i class="in-ring"></i><i class="in-ring r2"></i></div>
+      <i class="in-flash" aria-hidden="true"></i>
+      <p class="in-tag">ARCADE COMBAT</p>
+      <div class="in-load" aria-hidden="true"><em></em></div>
+      <button class="in-skip" type="button" aria-label="Skip intro">SKIP ▸</button>
+    </section>
+
+    <section id="menu" class="screen lb" hidden>
       <div class="lb-bg" aria-hidden="true"><i class="lb-grid"></i><i class="lb-radar"><b></b></i><i class="lb-glow"></i></div>
 
       <header class="lb-top">
@@ -139,12 +150,15 @@
           <div class="panel-heading"><span>AUDIO</span><i>OUTPUT MIXER</i></div>
           <label class="setting-row" for="music-vol"><span><strong>BACKGROUND MUSIC</strong><small>Menu, combat and boss themes</small></span><input id="music-vol" type="range" min="0" max="100" value="35"><output id="music-value">35%</output></label>
           <label class="setting-row" for="sfx-vol"><span><strong>SOUND EFFECTS</strong><small>Weapons, impacts and interface</small></span><input id="sfx-vol" type="range" min="0" max="100" value="70"><output id="sfx-value">70%</output></label>
-          <div class="setting-footnote">Move a slider to zero to mute that channel.</div>
+          <div class="setting-block"><span><strong>INTRO ANIMATION</strong><small>Play the opening animation at start</small></span><div class="seg" role="group" aria-label="Intro animation" data-setting="intro"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
+          <div class="setting-block"><span><strong>MOTION EFFECTS</strong><small>Lobby animation, dust and parallax</small></span><div class="seg" role="group" aria-label="Motion effects" data-setting="motion"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
         </div>
         <div class="settings-panel panel">
-          <div class="panel-heading"><span>PERFORMANCE</span><i>BATTERY SAVER</i></div>
-          <div class="setting-block"><span><strong>FRAME RATE</strong><small>Lower it to save battery</small></span><div class="seg" role="group" aria-label="Frame rate" data-setting="fps"><button type="button" data-value="30">30</button><button type="button" data-value="60">60</button><button type="button" data-value="0">MAX</button></div></div>
-          <div class="setting-block"><span><strong>MOTION EFFECTS</strong><small>Lobby animation, dust and parallax</small></span><div class="seg" role="group" aria-label="Motion effects" data-setting="motion"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
+          <div class="panel-heading"><span>DISPLAY</span><i>GRAPHICS &amp; SPEED</i></div>
+          <div class="setting-block"><span><strong>GRAPHICS QUALITY</strong><small>Effects: particles, glow, dust</small></span><div class="seg" role="group" aria-label="Graphics quality" data-setting="quality"><button type="button" data-value="1">LOW</button><button type="button" data-value="2">MEDIUM</button><button type="button" data-value="3">HIGH</button></div></div>
+          <div class="setting-block"><span><strong>RESOLUTION</strong><small>Lower is faster on slow phones, NATIVE is sharpest</small></span><div class="seg" role="group" aria-label="Resolution" data-setting="resolution"><button type="button" data-value="50">50%</button><button type="button" data-value="75">75%</button><button type="button" data-value="100">100%</button><button type="button" data-value="150">NATIVE</button></div></div>
+          <div class="setting-block"><span><strong>HDR-STYLE COLOR</strong><small>Richer contrast and colour (a look, not a real HDR mode)</small></span><div class="seg" role="group" aria-label="HDR-style colour" data-setting="vivid"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
+          <div class="setting-block"><span><strong>FRAME RATE</strong><small>90 and 120 need a screen with that refresh rate</small></span><div class="seg" role="group" aria-label="Frame rate" data-setting="fps"><button type="button" data-value="30">30</button><button type="button" data-value="60">60</button><button type="button" data-value="90">90</button><button type="button" data-value="120">120</button><button type="button" data-value="0">MAX</button></div></div>
         </div>
         <div class="settings-panel panel">
           <div class="panel-heading"><span>CONTROLS</span><i>FIELD OPTIONS</i></div>
@@ -236,6 +250,7 @@
   <script src="js/touch.js"></script>
   <script src="js/game.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/intro.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
