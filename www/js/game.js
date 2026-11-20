@@ -7,6 +7,14 @@ const PLAYER_SPEED = 220;
 const ACCEL = 2400;         // how fast the soldier reaches full speed (px/s squared)
 const DECEL = 3200;         // how fast the soldier stops
 const TAU = Math.PI * 2;
+// Graphics quality (Settings): how many particles, shell casings and dust motes are allowed, and whether the
+// soft glow gradients are drawn. LOW is for slow phones.
+const QUALITY_TABLE = {
+  1: { particles: 160, casings: 8,  motes: 0,  glow: false, dust: false },
+  2: { particles: 320, casings: 24, motes: 14, glow: true,  dust: true },
+  3: { particles: 500, casings: 40, motes: 28, glow: true,  dust: true }
+};
+function fxLevel() { return QUALITY_TABLE[save.settings.quality] || QUALITY_TABLE[3]; }
 const BOSS_RAGE = [1, 1, 1.2, 1.5];   // boss speed and fire rate for phase 1, 2, 3
 const HAPTIC_SHOT = { pistol: 6, rifle: 5, shotgun: 18, sniper: 22 };
 
@@ -50,7 +58,11 @@ function resizeGameCanvas() {
   const rect = canvas.getBoundingClientRect();
   if (!rect.width || !rect.height) return;
 
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  // Resolution setting: 100% is the device pixel ratio capped at 2 (the original look), 50% and 75% render fewer
+  // pixels on slow phones, and NATIVE (150) uses the full device pixel ratio, up to 3.
+  const res = save.settings.resolution;
+  const deviceRatio = window.devicePixelRatio || 1;
+  const pixelRatio = res === 150 ? Math.min(deviceRatio, 3) : Math.max(0.5, Math.min(deviceRatio, 2) * res / 100);
   const pixelWidth = Math.max(1, Math.round(rect.width * pixelRatio));
   const pixelHeight = Math.max(1, Math.round(rect.height * pixelRatio));
 
@@ -320,7 +332,8 @@ function lineClear(x1, y1, x2, y2) {
 /* ---------- Effects ---------- */
 
 function spark(x, y, color, count, speed) {
-  for (let i = 0; i < count && G.particles.length < 500; i++) {
+  const limit = fxLevel().particles;
+  for (let i = 0; i < count && G.particles.length < limit; i++) {
     const a = Math.random() * Math.PI * 2;
     const v = speed * (0.3 + Math.random() * 0.7);
     const life = 0.2 + Math.random() * 0.3;
@@ -330,7 +343,7 @@ function spark(x, y, color, count, speed) {
 
 // one particle, taken from the pool
 function puff(x, y, vx, vy, size, life, color) {
-  if (G.particles.length >= 500) return;
+  if (G.particles.length >= fxLevel().particles) return;
   const q = Pool.particle();
   q.x = x; q.y = y; q.vx = vx; q.vy = vy; q.life = life; q.max = life; q.size = size; q.color = color;
   G.particles.push(q);
@@ -350,7 +363,7 @@ function addBullet(x, y, angle, speed, dmg, friendly, life, color, pierce) {
 }
 
 function ejectCasing(p, w) {
-  if (G.casings.length >= 40) return;
+  if (G.casings.length >= fxLevel().casings) return;
   const side = p.angle + Math.PI / 2 + (Math.random() - 0.5) * 0.7;
   const speed = 70 + Math.random() * 70;
   G.casings.push({
@@ -390,6 +403,7 @@ function movePlayer(dx, dy) {
 }
 
 function kickDust(p) {
+  if (!fxLevel().dust) return;
   const a = p.moveAngle + Math.PI;
   puff(p.x + Math.cos(a) * p.r * 0.6, p.y + p.r * 0.45, Math.cos(a) * 20 + (Math.random() - 0.5) * 20, -8 - Math.random() * 10,
        2 + Math.random() * 1.5, 0.3, "rgba(214, 196, 150, 0.7)");
@@ -1454,11 +1468,13 @@ function hudPanel(x, y, width, height, accent) {
 
 // slow dust motes at three depths give the flat arena a little parallax
 function drawMotes() {
-  if (!save.settings.motion) return;
+  const count = fxLevel().motes;
+  if (!save.settings.motion || count === 0) return;
   const p = G.player;
   const t = G.time;
   ctx.fillStyle = "#e8f0c8";
-  for (const m of G.motes) {
+  for (let i = 0; i < count && i < G.motes.length; i++) {
+    const m = G.motes[i];
     let x = (m.x + t * m.vx - (p.x - W / 2) * m.l * 0.04) % W;
     let y = (m.y + t * m.vy - (p.y - H / 2) * m.l * 0.04) % H;
     if (x < 0) x += W;
@@ -1473,9 +1489,12 @@ function drawCore(c) {
   if (c.life < 3 && Math.floor(c.life * 6) % 2 === 0) return;
   const def = CORE_TYPES[c.type];
   const y = c.y + Math.sin(c.t * 4) * 2.5;
-  const glow = ctx.createRadialGradient(c.x, y, 2, c.x, y, 28);
-  glow.addColorStop(0, def.color + "aa");
-  glow.addColorStop(1, def.color + "00");
+  let glow = def.color + "55";
+  if (fxLevel().glow) {
+    glow = ctx.createRadialGradient(c.x, y, 2, c.x, y, 28);
+    glow.addColorStop(0, def.color + "aa");
+    glow.addColorStop(1, def.color + "00");
+  }
   ctx.fillStyle = glow;
   ctx.beginPath(); ctx.arc(c.x, y, 28, 0, TAU); ctx.fill();
 
@@ -1611,9 +1630,12 @@ function render() {
     if (s.scaleP > 0.02) {
       const radius = p.r * 2.7;
       const pulse = 0.85 + 0.15 * Math.sin(s.pulse * 9);
-      const aura = ctx.createRadialGradient(p.x, p.y, p.r * 0.6, p.x, p.y, radius);
-      aura.addColorStop(0, "rgba(255, 220, 110, " + (0.42 * Ease.clamp01(s.scaleP) * pulse) + ")");
-      aura.addColorStop(1, "rgba(255, 190, 60, 0)");
+      let aura = "rgba(255, 210, 90, " + (0.22 * Ease.clamp01(s.scaleP) * pulse) + ")";
+      if (fxLevel().glow) {
+        aura = ctx.createRadialGradient(p.x, p.y, p.r * 0.6, p.x, p.y, radius);
+        aura.addColorStop(0, "rgba(255, 220, 110, " + (0.42 * Ease.clamp01(s.scaleP) * pulse) + ")");
+        aura.addColorStop(1, "rgba(255, 190, 60, 0)");
+      }
       ctx.fillStyle = aura;
       ctx.beginPath(); ctx.arc(p.x, p.y, radius, 0, TAU); ctx.fill();
     }
