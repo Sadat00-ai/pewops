@@ -274,24 +274,23 @@ async function postEvents(request, env) {
   return json({ ok: true });
 }
 
-let downloadsCache = { at: 0, value: null };
-async function githubDownloads(env) {
-  if (downloadsCache.value && Date.now() - downloadsCache.at < 600000) return downloadsCache.value;
-  const value = { total: 0, releases: [], error: null };
+// Download counts are copied in by a scheduled GitHub job (GitHub refuses anonymous requests from Cloudflare).
+async function readDownloads(env) {
+  const row = await env.DB.prepare("SELECT value, updated FROM meta WHERE key = 'downloads'").first();
+  if (!row) return { total: 0, releases: [], updated: 0 };
   try {
-    const response = await fetch("https://api.github.com/repos/" + env.GITHUB_REPO + "/releases?per_page=30", { headers: { "user-agent": "pewops-server", accept: "application/vnd.github+json" } });
-    if (!response.ok) throw new Error("GitHub answered " + response.status);
-    const releases = await response.json();
-    value.releases = releases.map(function (r) {
-      let apk = 0;
-      let aab = 0;
-      (r.assets || []).forEach(function (a) { if (/\.apk$/.test(a.name)) apk += a.download_count; else if (/\.aab$/.test(a.name)) aab += a.download_count; });
-      return { tag: r.tag_name, apk: apk, aab: aab };
-    });
-    value.total = value.releases.reduce(function (sum, r) { return sum + r.apk; }, 0);   // only the APK is a direct install; the bundle is for the Play Store
-  } catch (error) { value.error = String(error.message || error); }
-  downloadsCache = { at: Date.now(), value: value };
-  return value;
+    const releases = JSON.parse(row.value);
+    return { total: releases.reduce(function (sum, r) { return sum + r.apk; }, 0), releases: releases, updated: row.updated };   // the APK is the direct install; the bundle goes to the Play Store
+  } catch (error) { return { total: 0, releases: [], updated: 0 }; }
+}
+
+async function postDownloads(request, env) {
+  const body = await readJson(request);
+  const releases = (Array.isArray(body.releases) ? body.releases : []).slice(0, 50).map(function (r) {
+    return { tag: String(r.tag || "").replace(/[^0-9A-Za-z.\-]/g, "").slice(0, 16), apk: clampInt(r.apk, 1e9), aab: clampInt(r.aab, 1e9) };
+  });
+  await env.DB.prepare("INSERT INTO meta (key, value, updated) VALUES ('downloads', ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated = excluded.updated").bind(JSON.stringify(releases), Date.now()).run();
+  return json({ ok: true, releases: releases.length });
 }
 
 async function stats(env) {
@@ -320,7 +319,7 @@ async function stats(env) {
     one("SELECT COUNT(*) AS c FROM devices WHERE first_day = ?", [ago(7)]),
     one("SELECT COUNT(*) AS c FROM devices d WHERE d.first_day = ? AND EXISTS (SELECT 1 FROM events e WHERE e.device_id = d.device_id AND e.day = ?)", [ago(7), today]),
     one("SELECT COUNT(*) AS c FROM events WHERE name = 'game_start'"),
-    githubDownloads(env)
+    readDownloads(env)
   ]);
   const days = [];
   for (let i = 13; i >= 0; i--) days.push(ago(i));
@@ -379,7 +378,7 @@ function bars(days,vals){var m=Math.max.apply(null,vals.concat([1]));return '<ta
 function list(rows,a,b){return '<table>'+(rows.length?rows.map(function(r){return '<tr><td>'+r[a]+'</td><td>'+n(r[b])+'</td></tr>'}).join(''):'<tr><td class="muted">No data yet</td></tr>')+'</table>'}
 function pct(a,b){return b?Math.round(a/b*100)+'% ('+a+' of '+b+')':'no players in that group yet'}
 function draw(s){
- var d=s.downloads,dl=d.error?'<span class="err">GitHub: '+d.error+'</span>':'<table><tr><th>Version</th><th>APK</th><th>AAB</th></tr>'+d.releases.map(function(r){return '<tr><td>'+r.tag+'</td><td>'+n(r.apk)+'</td><td>'+n(r.aab)+'</td></tr>'}).join('')+'</table>';
+ var d=s.downloads,dl='<table><tr><th>Version</th><th>APK</th><th>AAB</th></tr>'+d.releases.map(function(r){return '<tr><td>'+r.tag+'</td><td>'+n(r.apk)+'</td><td>'+n(r.aab)+'</td></tr>'}).join('')+'</table>'+(d.updated?'':'<p class="muted">No download data yet.</p>');
  out.innerHTML='<div class="cards">'
  +'<div class="card"><b>'+n(s.online_now)+'</b><span>Playing now (5 min)</span></div>'
  +'<div class="card"><b>'+n(s.active_today)+'</b><span>Active today</span></div>'
@@ -396,7 +395,7 @@ function draw(s){
  +'<div class="box"><h2>Countries</h2>'+list(s.countries,'country','players')+'</div>'
  +'<div class="box"><h2>Versions in use (14 days)</h2>'+list(s.versions,'version','players')+'</div>'
  +'<div class="box"><h2>Players coming back</h2><p>Next day: '+pct(s.retention.d1_back,s.retention.d1_cohort)+'</p><p>After 7 days: '+pct(s.retention.d7_back,s.retention.d7_cohort)+'</p></div>'
- +'<div class="box"><h2>GitHub downloads</h2>'+dl+'<p class="muted">Play Store installs are only shown in the Play Console.</p></div></div>';
+ +'<div class="box"><h2>GitHub downloads</h2>'+dl+'<p class="muted">Copied from GitHub every 6 hours'+(d.updated?' (last: '+new Date(d.updated).toLocaleString()+')':'')+'. Play Store installs are only shown in the Play Console.</p></div></div>';
  stamp.textContent='Updated '+new Date(s.generated).toLocaleTimeString()+' (day '+s.today+', Dhaka time)';
 }
 function load(){
@@ -424,6 +423,7 @@ export default {
       if (path === "/api/events" && request.method === "POST") return await postEvents(request, env);
       if (path === "/api/leaderboard" && request.method === "GET") return await leaderboard(request, env);
       if (path === "/api/stats" && request.method === "GET") return isAdmin(request, env) ? json(await stats(env), 200, { "cache-control": "no-store" }) : fail("Unauthorized.", 401);
+      if (path === "/api/downloads" && request.method === "POST") return isAdmin(request, env) ? await postDownloads(request, env) : fail("Unauthorized.", 401);
 
       const who = await readToken(env, request);
       if (path === "/api/me" && request.method === "GET") return who ? await me(request, env, who) : fail("Please log in again.", 401);
