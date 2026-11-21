@@ -163,3 +163,20 @@ html.is-touch .lb { padding-top: calc(var(--u) * 1.8); }
 /* HDR-style colours (Settings): a small contrast and saturation lift on the game canvas.
    Phones cannot output real HDR from a web canvas, so this is a look, not a display mode. */
 html.vivid #game { filter: contrast(1.08) saturate(1.25) brightness(1.03); }
+
+/* ---------- online account and world leaderboard ---------- */
+.account-layout { display: grid; flex: 1 1 auto; min-height: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 14px 0 12px; align-content: start; }
+.account-card { display: flex; flex-direction: column; gap: 9px; padding: 14px 16px; min-height: 0; }
+.account-card input[type="text"], .account-card input[type="password"] { width: 100%; min-height: 38px; padding: 0 12px; border: 1px solid var(--line-bright); background: rgba(8, 14, 10, 0.85); color: var(--text); font-size: 14px; }
+.account-card input:focus { outline: 2px solid var(--olive-bright); outline-offset: 1px; }
+.account-card form { display: flex; flex-direction: column; gap: 7px; }
+.account-card .btn { justify-content: center; min-height: 38px; }
+.account-note { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.acc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.acc-danger { margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--line); }
+.acc-danger summary { cursor: pointer; color: var(--muted); font-size: 11px; letter-spacing: 0.1em; }
+.acc-danger[open] { display: flex; flex-direction: column; gap: 8px; }
+.lb-icon-btn.on { border-color: var(--olive-bright); box-shadow: inset 0 0 0 1px var(--olive-bright); color: var(--olive-bright); }
+.board-tabs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0 8px; }
+.score-table li.me { border-color: var(--hot, #ff9d3d); box-shadow: inset 3px 0 0 var(--hot, #ff9d3d); }
+#world-list { overflow-y: auto; scrollbar-width: thin; }

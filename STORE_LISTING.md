@@ -3,7 +3,7 @@
 **App name:** PewOps: Arcade Combat
 **Creator / developer:** SM Sadat
 **Category:** Games › Action
-**Version:** 2.4.0
+**Version:** 2.5.0
 **Package ID:** com.smsadat.pewops
 **Orientation:** Landscape
 **Internet needed:** No (plays fully offline)
@@ -42,7 +42,16 @@ Download PewOps and show the arena what you've got.
 
 *Created by SM Sadat.*
 
-## What's new in 2.4.0
+## What's new in 2.5.0
+• Optional online account with cloud save and a world leaderboard
+• Anonymous statistics (can be turned off) and in-app account deletion
+
+## Play Console: Data safety answers for 2.5.0
+• Data collected: User IDs (username), Device or other IDs (random app ID), App activity (game events), Approximate location (country), Game progress. Not collected: name, email, phone, contacts, photos, exact location, advertising ID.
+• Purpose: app functionality and analytics. Not shared with third parties for their own use. Data is encrypted in transit (HTTPS).
+• Users can request deletion: in the app (Online account > Delete my account) and by email. Account deletion link: use the privacy policy page.
+
+## Earlier: 2.4.0
 • Animated intro before the lobby
 • Graphics quality, resolution, HDR-style colour and 30 / 60 / 90 / 120 FPS settings
 

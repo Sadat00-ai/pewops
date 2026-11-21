@@ -11,7 +11,7 @@ const RANKS = [
   { name: "COMMANDER", xp: 3000 }
 ];
 
-const MUSIC_SCREENS = ["menu", "campaign", "weapons", "shop", "missions", "profile", "settings", "instructions", "leaderboard"];
+const MUSIC_SCREENS = ["menu", "campaign", "weapons", "shop", "missions", "account", "profile", "settings", "instructions", "leaderboard"];
 
 const UI = {
   current: "menu",
@@ -91,6 +91,7 @@ const UI = {
     }
 
     get("home-avatar").className = "avatar avatar-" + save.profile.avatar;
+    get("account-btn").classList.toggle("on", Online.loggedIn());
 
     const profileAvatar = document.getElementById("profile-avatar");
     if (profileAvatar) profileAvatar.className = "avatar avatar-profile avatar-" + save.profile.avatar;
@@ -372,6 +373,82 @@ const UI = {
     this.refreshHome();
   },
 
+  // ---- online account ----
+  accountTab: "login",
+
+  buildAccount() {
+    const out = document.getElementById("account-out");
+    const inside = document.getElementById("account-in");
+    const loggedIn = Online.loggedIn();
+    out.hidden = loggedIn;
+    inside.hidden = !loggedIn;
+    document.getElementById("acc-msg").textContent = "";
+    document.getElementById("acc-in-msg").textContent = "";
+    if (loggedIn) {
+      document.getElementById("acc-name").textContent = Online.username.toUpperCase();
+      document.getElementById("acc-sync").textContent = Online.lastSync ? "SYNCED " + new Date(Online.lastSync).toLocaleTimeString() : "ONLINE";
+    }
+    this.setAccountTab(this.accountTab);
+  },
+
+  setAccountTab(tab) {
+    this.accountTab = tab;
+    document.querySelectorAll("#account-tabs button").forEach(function (button) { button.classList.toggle("on", button.dataset.tab === tab); });
+    document.getElementById("acc-submit").textContent = tab === "signup" ? "CREATE ACCOUNT" : "LOG IN";
+    document.getElementById("acc-pass").autocomplete = tab === "signup" ? "new-password" : "current-password";
+  },
+
+  // ---- world leaderboard ----
+  boardMode: "survival",
+
+  buildWorld() {
+    const list = document.getElementById("world-list");
+    const message = document.getElementById("world-msg");
+    list.innerHTML = "";
+    message.hidden = false;
+    message.textContent = "LOADING WORLD RANKINGS...";
+    document.querySelectorAll("#board-modes button").forEach(function (button) { button.classList.toggle("on", button.dataset.mode === UI.boardMode); });
+    const wanted = this.boardMode;
+    Online.leaderboard(wanted).then(function (result) {
+      if (UI.boardMode !== wanted) return;                       // the player switched tabs while this was loading
+      list.innerHTML = "";
+      if (!result.ok) { message.textContent = result.data.error || "Could not load the leaderboard."; return; }
+      const rows = result.data.rows || [];
+      message.textContent = Online.loggedIn() ? (result.data.mine ? "YOUR RANK: #" + result.data.mine.rank : "PLAY A RUN TO ENTER THE BOARD") : "LOG IN (ACCOUNT BUTTON IN THE LOBBY) TO APPEAR ON THE BOARD";
+      if (!rows.length) {
+        const empty = document.createElement("li");
+        empty.textContent = "Nobody is on this board yet. Be the first!";
+        list.appendChild(empty);
+        return;
+      }
+      rows.forEach(function (row, index) {
+        const item = document.createElement("li");
+        const rank = document.createElement("strong");
+        const name = document.createElement("span");
+        const score = document.createElement("strong");
+        rank.className = "score-rank";
+        name.className = "score-details";
+        score.className = "score-value";
+        rank.textContent = String(index + 1).padStart(2, "0");
+        name.textContent = row.name + " · " + row.kills + " kills";
+        score.textContent = Number(row.score).toLocaleString();
+        if (Online.loggedIn() && row.name.toLowerCase() === Online.username.toLowerCase()) item.classList.add("me");
+        item.append(rank, name, score);
+        list.appendChild(item);
+      });
+    });
+  },
+
+  showBoard(which) {
+    const world = which === "world";
+    document.querySelectorAll("#board-tabs button").forEach(function (button) { button.classList.toggle("on", button.dataset.board === which); });
+    document.getElementById("score-list").hidden = world;
+    document.getElementById("world-list").hidden = !world;
+    document.getElementById("board-modes").hidden = !world;
+    document.getElementById("world-msg").hidden = !world;
+    if (world) this.buildWorld();
+  },
+
   buildScores() {
     const list = document.getElementById("score-list");
     list.innerHTML = "";
@@ -435,6 +512,70 @@ const UI = {
     UI.syncVolumes();
     UI.applySettings();
 
+    // leaderboard tabs
+    document.getElementById("board-tabs").addEventListener("click", function (event) {
+      const button = event.target.closest("button");
+      if (button) UI.showBoard(button.dataset.board);
+    });
+    document.getElementById("board-modes").addEventListener("click", function (event) {
+      const button = event.target.closest("button");
+      if (!button) return;
+      UI.boardMode = button.dataset.mode;
+      UI.buildWorld();
+    });
+
+    // online account screen
+    document.getElementById("account-tabs").addEventListener("click", function (event) {
+      const button = event.target.closest("button");
+      if (button) { UI.setAccountTab(button.dataset.tab); document.getElementById("acc-msg").textContent = ""; }
+    });
+    document.getElementById("account-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const message = document.getElementById("acc-msg");
+      const submit = document.getElementById("acc-submit");
+      const name = document.getElementById("acc-user").value.trim();
+      const pass = document.getElementById("acc-pass").value;
+      if (!/^[A-Za-z0-9_]{3,16}$/.test(name)) { message.textContent = "Username: 3 to 16 letters, numbers or underscores."; return; }
+      if (pass.length < 6) { message.textContent = "Password must be at least 6 characters."; return; }
+      submit.disabled = true;
+      message.textContent = "Please wait...";
+      const call = UI.accountTab === "signup" ? Online.signUp(name, pass) : Online.logIn(name, pass);
+      call.then(function (result) {
+        submit.disabled = false;
+        if (!result.ok) { message.textContent = result.data.error || "Something went wrong."; return; }
+        document.getElementById("acc-pass").value = "";
+        UI.buildAccount();
+        document.getElementById("acc-in-msg").textContent = result.note || "";
+        UI.refreshHome();
+      });
+    });
+    document.getElementById("acc-sync-btn").addEventListener("click", function () {
+      const message = document.getElementById("acc-in-msg");
+      message.textContent = "Syncing...";
+      Online.syncDown(false).then(function (note) {
+        message.textContent = note;
+        if (!Online.loggedIn()) UI.buildAccount(); else document.getElementById("acc-sync").textContent = "SYNCED " + new Date().toLocaleTimeString();
+      });
+    });
+    document.getElementById("acc-logout").addEventListener("click", function () {
+      Online.logOut();
+      UI.buildAccount();
+      UI.refreshHome();
+    });
+    document.getElementById("acc-delete").addEventListener("click", function () {
+      const message = document.getElementById("acc-in-msg");
+      const password = document.getElementById("acc-del-pass").value;
+      if (!password) { message.textContent = "Type your password to confirm."; return; }
+      if (!confirm("Delete your online account, progress and scores for good?")) return;
+      Online.deleteAccount(password).then(function (result) {
+        if (!result.ok) { message.textContent = result.data.error || "Could not delete the account."; return; }
+        document.getElementById("acc-del-pass").value = "";
+        UI.buildAccount();
+        document.getElementById("acc-msg").textContent = "Your online account was deleted.";
+        UI.refreshHome();
+      });
+    });
+
     const profileForm = document.getElementById("profile-form");
     const callsignInput = document.getElementById("callsign-input");
     const profileFeedback = document.getElementById("profile-feedback");
@@ -497,7 +638,8 @@ const UI = {
       profile: function () { UI.openProfile(); },
       settings: function () { UI.show("settings"); },
       instructions: function () { UI.show("instructions"); },
-      leaderboard: function () { UI.buildScores(); UI.show("leaderboard"); },
+      leaderboard: function () { UI.buildScores(); UI.showBoard("local"); UI.show("leaderboard"); },
+      account: function () { UI.buildAccount(); UI.show("account"); },
       back: function () { UI.show("menu"); },
       resume: resumeGame,
       restart: function () { startGame(G.mode, G.level); },

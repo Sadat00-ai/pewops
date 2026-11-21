@@ -1,0 +1,26 @@
+name: Sync download counts
+
+# Copies the GitHub release download counts to the PewOps server every 6 hours, so the owner dashboard can show them.
+# Needs the repository secret PEWOPS_ADMIN_KEY (the same admin key used to open the dashboard).
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Send counts to the server
+        env:
+          GH_TOKEN: ${{ github.token }}
+          KEY: ${{ secrets.PEWOPS_ADMIN_KEY }}
+          API: https://pewops-api.xedrahi91.workers.dev
+        run: |
+          set -e
+          if [ -z "$KEY" ]; then echo "PEWOPS_ADMIN_KEY is not set"; exit 1; fi
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=50" --jq '[.[] | {tag: .tag_name, apk: ([.assets[] | select(.name | endswith(".apk")) | .download_count] | add // 0), aab: ([.assets[] | select(.name | endswith(".aab")) | .download_count] | add // 0)}]' > releases.json
+          curl -fsS -X POST "$API/api/downloads" -H "authorization: Bearer $KEY" -H "content-type: application/json" --data "{\"releases\": $(cat releases.json)}"

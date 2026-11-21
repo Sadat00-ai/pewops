@@ -1,6 +1,7 @@
 // main.js - starts everything once the page has loaded
 
 UI.init();
+Online.init();                       // device id, saved login and anonymous statistics
 if (typeof Intro !== "undefined") Intro.play();      // opening animation, then the lobby
 else UI.show("menu");
 requestAnimationFrame(function (now) {

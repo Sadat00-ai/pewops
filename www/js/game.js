@@ -137,6 +137,7 @@ function startGame(mode, levelIndex) {
   G.player.weapon = start >= 0 && weaponAvailable(start) ? start : 0;
 
   Progress.ensureDaily();
+  Online.track("game_start", mode);
   Sound.setSurge(false);
   state = "playing";
   canvas.classList.add("playing");
@@ -249,6 +250,8 @@ function showResult() {
     if (G.hitsTaken === 0) Progress.unlock("untouchable");
     finishRun(stats, credits);
     addScore("Campaign", Math.floor(G.score), G.kills, firstClear);
+    Online.track("level_clear", "campaign", n);
+    Online.afterRun("campaign", G.score, G.kills);
     const last = G.level >= LEVELS.length - 1;
     setState(last ? "victory" : "levelcomplete");
     const actions = last ? [menu] : [{ label: "Next mission", run: function () { startGame("campaign", G.level + 1); } }, menu];
@@ -260,6 +263,7 @@ function showResult() {
   if (G.mode === "survival") stats.push("Waves reached: " + G.wave, "Time survived: " + formatTime(G.time));
   finishRun(stats, credits);
   addScore(labels[G.mode] || "Run", Math.floor(G.score), G.kills);
+  Online.afterRun(G.mode, G.score, G.kills);
   setState("gameover");
   UI.showEnd(kind === "timeup" ? "Time up" : "Game over", stats, [retry, menu]);
 }
