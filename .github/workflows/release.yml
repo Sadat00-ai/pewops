@@ -87,7 +87,7 @@ jobs:
         run: |
           set -e
           V=$(node -p "require('./package.json').version")
-          SHA=$(git rev-parse HEAD)
+          SHA="$GITHUB_SHA"   # the release is created on the branch tip; for an older build it is re-pointed when published
           awk -v v="$V" '$0 ~ "^## "v {f=1; print; next} f && /^## /{exit} f' CHANGELOG.md > "$RUNNER_TEMP/notes.md" || true
           [ -s "$RUNNER_TEMP/notes.md" ] || echo "PewOps $V - signed Play Store bundle (.aab) and signed APK." > "$RUNNER_TEMP/notes.md"
           gh release delete "v$V" --yes --cleanup-tag 2>/dev/null || true
