@@ -48,6 +48,7 @@
         <div class="lb-logo" role="img" aria-label="PewOps Arcade Combat"><strong>PEW<em>OPS</em></strong><small>ARCADE COMBAT</small></div>
         <div class="lb-wallet">
           <span class="lb-chip" aria-label="Credits"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.6"/></svg><b id="home-coins">0</b></span>
+          <button class="lb-icon-btn" id="account-btn" type="button" data-action="account" aria-label="Online account"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></button>
           <button class="lb-icon-btn" type="button" data-action="settings" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg></button>
         </div>
       </header>
@@ -196,8 +197,48 @@
 
     <section id="leaderboard" class="screen inner-screen" hidden>
       <header class="screen-heading"><div><span class="eyebrow">INTELLIGENCE / FIELD RECORDS</span><h2>MISSION <em>RECORDS</em></h2><p class="screen-intro">Your best runs, ranked by score. Records stay on this device.</p></div><div class="records-stamp">TOP<br>8</div></header>
+      <div class="board-tabs">
+        <div class="seg" id="board-tabs" role="group" aria-label="Leaderboard"><button type="button" class="on" data-board="local">MY RECORDS</button><button type="button" data-board="world">WORLD</button></div>
+        <div class="seg" id="board-modes" role="group" aria-label="Game mode" hidden><button type="button" class="on" data-mode="survival">SURVIVAL</button><button type="button" data-mode="timeattack">TIME ATTACK</button><button type="button" data-mode="campaign">CAMPAIGN</button></div>
+      </div>
       <ol id="score-list" class="score-table panel"></ol>
+      <ol id="world-list" class="score-table panel" hidden></ol>
+      <p id="world-msg" class="inline-feedback" aria-live="polite" hidden></p>
       <div class="screen-actions"><span class="legend">PERSONAL BESTS · LOCAL LEADERBOARD</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
+    </section>
+
+    <section id="account" class="screen inner-screen" hidden>
+      <header class="screen-heading"><div><span class="eyebrow">ONLINE / WORLD SERVICE</span><h2>ONLINE <em>ACCOUNT</em></h2><p class="screen-intro">Optional. An account saves your progress online and puts you on the world leaderboard. The game works fully offline without one.</p></div><div class="records-stamp">WORLD<br>NET</div></header>
+      <div class="account-layout">
+        <div class="panel account-card" id="account-out">
+          <div class="seg" id="account-tabs" role="group" aria-label="Account"><button type="button" class="on" data-tab="login">LOG IN</button><button type="button" data-tab="signup">CREATE ACCOUNT</button></div>
+          <form id="account-form" autocomplete="off" novalidate>
+            <label class="field-label" for="acc-user">USERNAME</label>
+            <input id="acc-user" type="text" maxlength="16" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="3-16 letters, numbers or _">
+            <label class="field-label" for="acc-pass">PASSWORD</label>
+            <input id="acc-pass" type="password" maxlength="72" autocomplete="off" placeholder="at least 6 characters">
+            <button class="btn btn-primary" id="acc-submit" type="submit">LOG IN</button>
+            <p class="inline-feedback" id="acc-msg" aria-live="polite"></p>
+          </form>
+        </div>
+        <div class="panel account-card" id="account-in" hidden>
+          <div class="panel-heading"><span id="acc-name">PLAYER</span><i id="acc-sync">ONLINE</i></div>
+          <p class="account-note">Your progress and scores are saved online after every run. If two phones differ, the one with more XP wins.</p>
+          <div class="acc-actions"><button class="btn btn-primary" id="acc-sync-btn" type="button">SYNC NOW</button><button class="btn btn-ghost" id="acc-logout" type="button">LOG OUT</button></div>
+          <p class="inline-feedback" id="acc-in-msg" aria-live="polite"></p>
+          <details class="acc-danger"><summary>Delete my account</summary>
+            <p class="account-note">Permanently deletes your online account, progress and leaderboard scores. Progress on this phone stays.</p>
+            <input id="acc-del-pass" type="password" maxlength="72" autocomplete="off" placeholder="Your password">
+            <button class="btn btn-danger" id="acc-delete" type="button">DELETE ACCOUNT</button>
+          </details>
+        </div>
+        <div class="panel account-card">
+          <div class="panel-heading"><span>PRIVACY</span><i>WHAT IS SHARED</i></div>
+          <p class="account-note">Account: your username and a scrambled (hashed) password, never the password itself. Anonymous statistics: a random device ID, app version, country and game events (game started or ended, mission cleared). No name, email, contacts or exact location.</p>
+          <div class="setting-block"><span><strong>SHARE ANONYMOUS STATISTICS</strong><small>Helps count players and improve the game</small></span><div class="seg" role="group" aria-label="Share anonymous statistics" data-setting="stats"><button type="button" data-value="1">ON</button><button type="button" data-value="0">OFF</button></div></div>
+        </div>
+      </div>
+      <div class="screen-actions"><span class="legend">ACCOUNTS ARE OPTIONAL</span><button class="btn btn-ghost btn-back" data-action="back">← MAIN MENU</button></div>
     </section>
 
     <section id="shop" class="screen inner-screen" hidden>
@@ -244,7 +285,9 @@
   <script src="js/audio.js"></script>
   <script src="js/weapons.js"></script>
   <script src="js/levels.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/fx.js"></script>
+  <script src="js/online.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/power.js"></script>
   <script src="js/touch.js"></script>
