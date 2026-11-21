@@ -1,5 +1,13 @@
 # PewOps Android edition
 
+## 2.5.0 (Online update)
+- **Optional online account:** create an account or log in from the person button in the lobby. Your progress is saved online after every run and loaded on a new phone (the copy with more XP wins). The game still works fully offline without an account.
+- **World leaderboard:** Survival, Time Attack and Campaign rankings next to your own records.
+- **Anonymous usage statistics** (random device ID, version, country, game events) help count players. They can be switched off in the account screen. No names, emails or exact locations.
+- **Delete my account** inside the app removes the online account, progress and scores.
+- New server on Cloudflare (free tier) with an owner dashboard for players online, daily and monthly players, game modes, countries, versions, returning players and download counts.
+- The privacy policy was rewritten to match.
+
 ## 2.4.0 (Display and intro update)
 - **Opening animation:** a short animated intro (logo slam, shockwave rings, tagline) plays before the lobby. Tap, press any key or use SKIP to jump straight in. It can be turned off in Settings.
 - **New display settings:** graphics quality (low / medium / high), resolution (50% / 75% / 100% / native), HDR-style colour boost, and frame rate up to 90 and 120 FPS. Phones cannot output real HDR from a web canvas, so the colour option is a look, not a display mode.
