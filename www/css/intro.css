@@ -1,0 +1,64 @@
+/* PEWOPS - opening animation. Everything moves with transform and opacity only. */
+
+.intro {
+  --hot: #ff9d3d;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #04070a;
+  cursor: pointer;
+}
+.in-bg { position: absolute; inset: 0; pointer-events: none; }
+.in-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(157, 187, 106, 0.16), transparent 62%), radial-gradient(ellipse at 50% 120%, rgba(255, 157, 61, 0.2), transparent 60%); opacity: 0; }
+.in-streak { position: absolute; left: 0; width: 100%; height: max(2px, 0.5vh); background: linear-gradient(90deg, transparent, rgba(214, 238, 152, 0.9), transparent); opacity: 0; transform: translateX(-120%); }
+.in-streak.s1 { top: 32%; }
+.in-streak.s2 { top: 50%; height: max(3px, 0.8vh); background: linear-gradient(90deg, transparent, rgba(255, 157, 61, 0.9), transparent); }
+.in-streak.s3 { top: 68%; }
+
+.in-presents { position: absolute; top: 42%; left: 0; width: 100%; text-align: center; font-family: var(--heading); font-size: max(11px, 2.4vh); font-weight: 800; letter-spacing: 0.5em; text-indent: 0.5em; color: var(--muted); opacity: 0; }
+
+.in-logo { position: relative; display: flex; align-items: baseline; justify-content: center; font-family: var(--heading); font-size: min(26vh, 15vw); font-weight: 900; font-style: italic; line-height: 0.9; letter-spacing: 0.03em; }
+.in-word { display: block; opacity: 0; text-shadow: 0 0.05em 0 rgba(0, 0, 0, 0.6), 0 0 0.4em rgba(157, 187, 106, 0.3); }
+.in-pew { color: #eef1e8; transform: translateX(-70vw) skewX(-22deg); }
+.in-ops { color: var(--hot); transform: translateX(70vw) skewX(-22deg); text-shadow: 0 0.05em 0 rgba(0, 0, 0, 0.6), 0 0 0.4em rgba(255, 157, 61, 0.4); }
+.in-flash { position: fixed; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.in-ring { position: absolute; left: 50%; top: 50%; width: 30vh; height: 30vh; margin: -15vh 0 0 -15vh; border: max(3px, 0.7vh) solid #ffd34d; border-radius: 50%; opacity: 0; transform: scale(0.1); pointer-events: none; }
+.in-ring.r2 { border-color: #fff; border-width: max(2px, 0.4vh); }
+
+.in-tag { position: absolute; top: 66%; left: 0; width: 100%; text-align: center; font-family: var(--heading); font-size: max(12px, 3vh); font-weight: 800; letter-spacing: 0.6em; text-indent: 0.6em; color: var(--olive-bright); opacity: 0; transform: scaleX(0.6); }
+.in-load { position: absolute; left: 50%; bottom: 9%; width: min(40vw, 360px); height: max(3px, 0.6vh); margin-left: calc(min(40vw, 360px) / -2); background: rgba(158, 181, 150, 0.18); overflow: hidden; opacity: 0; }
+.in-load em { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, var(--hot), #ffd34d); transform: scaleX(0); transform-origin: 0 50%; }
+.in-skip { position: absolute; right: calc(max(18px, 2vw) + env(safe-area-inset-right, 0px)); bottom: calc(max(14px, 2vh) + env(safe-area-inset-bottom, 0px)); padding: 8px 14px; border: 1px solid var(--line-bright); background: rgba(20, 31, 25, 0.7); color: var(--muted); font-family: var(--heading); font-size: 12px; font-weight: 800; letter-spacing: 0.2em; cursor: pointer; opacity: 0; }
+
+/* timeline (about 4.6 seconds) */
+.intro.playing { animation: in-out 0.4s ease-in 4.2s forwards; }
+.intro.playing .in-vignette { animation: in-fade 1.2s ease-out 0.1s forwards; }
+.intro.playing .in-streak.s1 { animation: in-streak 0.9s ease-in-out 0.2s forwards; }
+.intro.playing .in-streak.s2 { animation: in-streak 0.9s ease-in-out 0.35s forwards; }
+.intro.playing .in-streak.s3 { animation: in-streak 0.9s ease-in-out 0.5s forwards; }
+.intro.playing .in-presents { animation: in-presents 1.5s ease-in-out 0.45s forwards; }
+.intro.playing .in-pew { animation: in-slide 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) 1.15s forwards; }
+.intro.playing .in-ops { animation: in-slide 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) 1.15s forwards; }
+.intro.playing .in-logo { animation: in-hit 0.45s ease-out 1.7s; }
+.intro.playing .in-flash { animation: in-flash 0.4s ease-out 1.7s; }
+.intro.playing .in-ring { animation: in-ring 0.95s ease-out 1.7s forwards; }
+.intro.playing .in-ring.r2 { animation-delay: 1.85s; }
+.intro.playing .in-tag { animation: in-tag 0.7s ease-out 2.25s forwards; }
+.intro.playing .in-load { animation: in-fade 0.3s ease-out 0.3s forwards; }
+.intro.playing .in-load em { animation: in-fill 3.8s linear 0.3s forwards; }
+.intro.playing .in-skip { animation: in-fade 0.4s ease-out 0.8s forwards; }
+
+@keyframes in-fade { to { opacity: 1; } }
+@keyframes in-out { to { opacity: 0; } }
+@keyframes in-streak { 0% { opacity: 0; transform: translateX(-120%); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateX(120%); } }
+@keyframes in-presents { 0% { opacity: 0; transform: translateY(8px); } 25%, 70% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8px); } }
+@keyframes in-slide { to { opacity: 1; transform: translateX(0) skewX(-8deg); } }
+@keyframes in-hit { 0% { transform: scale(1.14); } 30% { transform: scale(0.97) translateX(-6px); } 60% { transform: scale(1.02) translateX(4px); } 100% { transform: none; } }
+@keyframes in-flash { 0% { opacity: 0.85; } 100% { opacity: 0; } }
+@keyframes in-ring { 0% { opacity: 0.95; transform: scale(0.1); } 100% { opacity: 0; transform: scale(5); } }
+@keyframes in-tag { to { opacity: 1; transform: none; } }
+@keyframes in-fill { to { transform: scaleX(1); } }
+
+/* motion off: no intro at all (intro.js skips it), but keep the markup calm just in case */
+.no-motion .intro * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .intro, .intro * { animation: none !important; } }

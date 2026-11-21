@@ -3,7 +3,7 @@
 **App name:** PewOps: Arcade Combat
 **Creator / developer:** SM Sadat
 **Category:** Games › Action
-**Version:** 2.3.0
+**Version:** 2.4.0
 **Package ID:** com.smsadat.pewops
 **Orientation:** Landscape
 **Internet needed:** No (plays fully offline)
@@ -42,7 +42,11 @@ Download PewOps and show the arena what you've got.
 
 *Created by SM Sadat.*
 
-## What's new in 2.3.0
+## What's new in 2.4.0
+• Animated intro before the lobby
+• Graphics quality, resolution, HDR-style colour and 30 / 60 / 90 / 120 FPS settings
+
+## Earlier: 2.3.0
 • Power Surge: charge, grow and dominate
 • Power cores, shields, dash and a three-phase boss fight
 • New lobby, Upgrade Bay, daily missions and medals

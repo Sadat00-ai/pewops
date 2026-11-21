@@ -18,7 +18,7 @@ function defaultSave() {
     unlockedLevel: 1,
     unlockedWeapons: ["pistol", "rifle"],
     startWeapon: "pistol",
-    settings: { music: 0.35, sfx: 0.7, haptics: true, fps: 60, aimAssist: true, motion: true, hud: 100, stickFire: true },
+    settings: { music: 0.35, sfx: 0.7, haptics: true, fps: 60, aimAssist: true, motion: true, hud: 100, stickFire: true, quality: 3, resolution: 100, vivid: false, intro: true },
     profile: { callsign: "ROOKIE", avatar: "scout" },
     totalKills: 0,
     xp: 0,
@@ -77,7 +77,11 @@ function loadSave() {
   s.aimAssist = s.aimAssist !== false;
   s.motion = s.motion !== false;
   s.stickFire = s.stickFire !== false;
-  s.fps = [0, 30, 60].indexOf(Number(s.fps)) !== -1 ? Number(s.fps) : 60;
+  s.fps = [0, 30, 60, 90, 120].indexOf(Number(s.fps)) !== -1 ? Number(s.fps) : 60;
+  s.quality = [1, 2, 3].indexOf(Number(s.quality)) !== -1 ? Number(s.quality) : 3;
+  s.resolution = [50, 75, 100, 150].indexOf(Number(s.resolution)) !== -1 ? Number(s.resolution) : 100;
+  s.vivid = s.vivid === true;
+  s.intro = s.intro !== false;
   s.hud = [85, 100, 115].indexOf(Number(s.hud)) !== -1 ? Number(s.hud) : 100;
 
   // credits, upgrades, missions and achievements (added in 2.3)
