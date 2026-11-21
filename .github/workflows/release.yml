@@ -87,11 +87,12 @@ jobs:
         run: |
           set -e
           V=$(node -p "require('./package.json').version")
-          SHA="$GITHUB_SHA"   # the release is created on the branch tip; for an older build it is re-pointed when published
+          # the draft points at the branch (not a commit): GitHub refuses a release for a commit that is no longer the branch tip.
+          # The tag is created when the draft is published.
           awk -v v="$V" '$0 ~ "^## "v {f=1; print; next} f && /^## /{exit} f' CHANGELOG.md > "$RUNNER_TEMP/notes.md" || true
           [ -s "$RUNNER_TEMP/notes.md" ] || echo "PewOps $V - signed Play Store bundle (.aab) and signed APK." > "$RUNNER_TEMP/notes.md"
           gh release delete "v$V" --yes --cleanup-tag 2>/dev/null || true
           FLAGS=""
           if [ "$DRAFT" = "true" ]; then FLAGS="$FLAGS --draft"; fi
           gh release create "v$V" dist/PewOps-*-release.aab dist/PewOps-*-release.apk \
-            $FLAGS --target "$SHA" --title "PewOps $V" --notes-file "$RUNNER_TEMP/notes.md"
+            $FLAGS --target "$GITHUB_REF_NAME" --title "PewOps $V" --notes-file "$RUNNER_TEMP/notes.md"
